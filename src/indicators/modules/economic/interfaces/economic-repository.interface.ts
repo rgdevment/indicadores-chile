@@ -1,14 +1,15 @@
 import { EconomicEnum } from '../economic.enum';
-import { Economic } from '../schemas/economic.schema';
+import { BaseRepositoryInterface } from '../../../interfaces/base-repository.interface';
+import { EconomicDocument } from './economic.interface';
 
-export interface EconomicRepositoryInterface {
-  findCurrentOrLastDayRecord(indicator: EconomicEnum): Promise<Economic>;
+export interface EconomicRepositoryInterface extends BaseRepositoryInterface<EconomicDocument> {
+  findCurrentOrLastDayRecord(indicator: EconomicEnum): Promise<EconomicDocument>;
 
-  findFirstRecordOfMonth(indicator: EconomicEnum): Promise<Economic>;
+  findFirstRecordOfMonth(indicator: EconomicEnum): Promise<EconomicDocument>;
 
   calculateAverageValueOfMonth(indicator: EconomicEnum): Promise<number>;
 
-  findLastRecordOfMonth(indicator: EconomicEnum): Promise<Economic>;
+  findLastRecordOfMonth(indicator: EconomicEnum): Promise<EconomicDocument>;
 
   calculateAccumulatedValueLast12Months(indicator: EconomicEnum): Promise<number>;
 

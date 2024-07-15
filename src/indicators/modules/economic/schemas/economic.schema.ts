@@ -1,8 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { EconomicDocument } from '../interfaces/economic.interface';
 
 @Schema({ collection: 'economic_indicators' })
-export class Economic extends Document {
+export class Economic extends Document implements EconomicDocument {
   @Prop({ required: true })
   indicator: string;
 
