@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { IndicatorsModule } from './indicators/modules/indicators.module';
-import path from 'node:path';
+import { join } from 'path';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -22,7 +22,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     I18nModule.forRoot({
       fallbackLanguage: 'es',
       loaderOptions: {
-        path: path.join(__dirname, '/resources/i18n/'),
+        path: join(__dirname, '/resources/i18n/'),
         watch: false,
       },
       resolvers: [new HeaderResolver([])],

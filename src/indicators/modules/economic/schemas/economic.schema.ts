@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-@Schema()
+@Schema({ collection: 'economic_indicators' })
 export class Economic extends Document {
   @Prop({ required: true })
   type: string;
