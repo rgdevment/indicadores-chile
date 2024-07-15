@@ -18,7 +18,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       timestamp: new Date().toISOString(),
       path: request.url,
       method: request.method,
-      message: exception instanceof HttpException ? exception.message : this.i18n.t('globals.unexpectedError'),
+      message: exception instanceof HttpException ? exception.message : this.i18n.t('globals.UNEXPECTED_ERROR'),
     };
 
     if (!(exception instanceof HttpException)) {

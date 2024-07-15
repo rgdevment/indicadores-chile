@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 @Schema({ collection: 'economic_indicators' })
 export class Economic extends Document {
   @Prop({ required: true })
-  type: string;
+  indicator: string;
 
   @Prop({ required: true })
   value: number;

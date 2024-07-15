@@ -1,10 +1,10 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { EconomicRepositoryInterface } from './interfaces/economic-repository.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { Economic } from './schemas/economic.schema';
 import { EconomicEnum } from './economic.enum';
 import { AggregationResult } from '../../interfaces/aggregation-result.interface';
+import { EconomicRepositoryInterface } from './interfaces/economic-repository.interface';
 
 @Injectable()
 export class EconomicRepository implements EconomicRepositoryInterface {
@@ -17,7 +17,7 @@ export class EconomicRepository implements EconomicRepositoryInterface {
     const formattedDate = new Date().toISOString().split('T')[0];
     return this.economicModel
       .findOne({
-        type: indicator,
+        indicator,
         date: { $lte: formattedDate },
       })
       .sort({ date: -1 })
@@ -26,12 +26,12 @@ export class EconomicRepository implements EconomicRepositoryInterface {
 
   async findFirstRecordOfMonth(indicator: EconomicEnum): Promise<Economic> {
     const now = new Date();
-    const startOfMonth = new Date(now.getUTCFullYear(), now.getUTCMonth(), 1).toISOString().split('T')[0];
+    const date = new Date(now.getUTCFullYear(), now.getUTCMonth(), 1).toISOString().split('T')[0];
 
     return this.economicModel
       .findOne({
-        type: indicator,
-        date: startOfMonth,
+        indicator,
+        date,
       })
       .exec();
   }
@@ -42,7 +42,7 @@ export class EconomicRepository implements EconomicRepositoryInterface {
     const results = await this.economicModel.aggregate<AggregationResult>([
       {
         $match: {
-          type: indicator,
+          indicator,
           date: { $gte: startOfMonth, $lte: endOfMonth },
         },
       },
@@ -62,7 +62,7 @@ export class EconomicRepository implements EconomicRepositoryInterface {
     const endOfMonth = new Date(now.getUTCFullYear(), now.getUTCMonth() + 1, 0).toISOString().split('T')[0];
     return this.economicModel
       .findOne({
-        type: indicator,
+        indicator,
         date: { $lte: endOfMonth },
       })
       .sort({ date: -1 })
@@ -70,7 +70,7 @@ export class EconomicRepository implements EconomicRepositoryInterface {
   }
 
   async calculateAccumulatedValueLast12Months(indicator: EconomicEnum): Promise<number> {
-    const lastRecord = await this.economicModel.findOne({ type: indicator }).sort({ date: -1 }).exec();
+    const lastRecord = await this.economicModel.findOne({ indicator }).sort({ date: -1 }).exec();
 
     if (!lastRecord) {
       return null;
@@ -85,7 +85,7 @@ export class EconomicRepository implements EconomicRepositoryInterface {
     const results = await this.economicModel.aggregate<AggregationResult>([
       {
         $match: {
-          type: indicator,
+          indicator,
           date: { $gte: twelveMonthsAgo, $lt: startOfLastRecordMonth },
         },
       },
@@ -106,7 +106,7 @@ export class EconomicRepository implements EconomicRepositoryInterface {
     const results = await this.economicModel.aggregate<AggregationResult>([
       {
         $match: {
-          type: indicator,
+          indicator,
           date: { $gte: new Date(startOfYear), $lte: new Date(endOfYear) },
         },
       },

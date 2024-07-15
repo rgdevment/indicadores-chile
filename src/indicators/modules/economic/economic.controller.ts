@@ -8,23 +8,23 @@ import { EconomicService } from './economic.service';
 
 @ApiTags('Indicadores')
 @UseFilters(GlobalExceptionFilter)
-@Controller('indicadores')
+@Controller()
 export class EconomicController {
-  constructor(private readonly indicatorsService: EconomicService) {}
+  constructor(private readonly service: EconomicService) {}
 
-  @Get(':indicatorName')
+  @Get(':indicator')
   @ApiOperation({
     summary: 'Obtiene un indicador especifico.',
     description: 'Recopila y procesa información sobre el indicador solicitado.',
   })
   @ApiResponse({ status: 200, description: 'Success', type: IndicatorResponseDto })
-  async getIndicator(@Param('indicatorName', EconomicParsePipe) indicator: EconomicEnum) {
+  async getIndicator(@Param('indicator', EconomicParsePipe) indicator: EconomicEnum) {
     if (indicator === EconomicEnum.UF) {
-      return await this.indicatorsService.retrieveDetailsUFIndicator(indicator);
+      return await this.service.retrieveDetailsUFIndicator(indicator);
     } else if (indicator === EconomicEnum.IPC) {
-      return await this.indicatorsService.retrieveDetailsIPCIndicator(indicator);
+      return await this.service.retrieveDetailsIPCIndicator(indicator);
     }
 
-    return await this.indicatorsService.findCurrentIndicator(indicator);
+    return await this.service.findCurrentIndicator(indicator);
   }
 }

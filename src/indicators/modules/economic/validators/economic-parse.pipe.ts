@@ -10,7 +10,7 @@ export class EconomicParsePipe implements PipeTransform<string, EconomicEnum> {
     const enumValue = value.toUpperCase() as unknown as EconomicEnum;
 
     if (!Object.values(EconomicEnum).includes(enumValue)) {
-      const message = this.i18n.t('indicators.invalidIndicatorValue', { args: { value } });
+      const message = this.i18n.t('indicators.INVALID_INDICATOR_VALUE', { args: { value } });
       throw new BadRequestException(message);
     }
 
