@@ -4,6 +4,6 @@ import { ForeignExchangeModule } from './foreign-exchange/foreign-exchange.modul
 import { SalaryModule } from './salary/salary.module';
 
 @Module({
-  imports: [EconomicModule, ForeignExchangeModule, SalaryModule]
+  imports: [EconomicModule, ForeignExchangeModule, SalaryModule],
 })
 export class IndicatorsModule {}

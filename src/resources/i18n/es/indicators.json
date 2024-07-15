@@ -1,0 +1,8 @@
+{
+  "currentValueNote": "Valor actualizado al día de hoy.",
+  "firstDayOfMonthNote": "Valor del primer día del mes.",
+  "lastRecordedValueNote": "Valor del último día del mes, o el último valor registrado.",
+  "indicatorNotFound": "No se encontró información para el indicador {indicator} en la fecha actual.",
+  "invalidIndicatorValue": "{value} no es un valor de indicador admitido.",
+  "indicatorValueNotFound": "No se encontró información para el indicador {indicator} en la fecha {date}."
+}
