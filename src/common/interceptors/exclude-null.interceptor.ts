@@ -1,6 +1,7 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
 export class ExcludeNullInterceptor implements NestInterceptor {
@@ -9,21 +10,18 @@ export class ExcludeNullInterceptor implements NestInterceptor {
   }
 
   private transformResponse(data: any): any {
-    return this.removeNullAndUndefinedProperties(data);
+    const result = this.removeNullAndUndefinedProperties(data);
+    return instanceToPlain(result);
   }
 
   private removeNullAndUndefinedProperties(obj: any): any {
-    if (Array.isArray(obj)) {
-      return obj.map(item => this.removeNullAndUndefinedProperties(item));
-    } else if (obj !== null && typeof obj === 'object') {
-      return Object.keys(obj).reduce((acc, key) => {
-        const value = obj[key];
-        if (value !== null && value !== undefined) {
-          acc[key] = this.removeNullAndUndefinedProperties(value);
-        }
-        return acc;
-      }, {});
-    }
+    Object.keys(obj).forEach(key => {
+      if (obj[key] === null || obj[key] === undefined) {
+        delete obj[key];
+      } else if (typeof obj[key] === 'object') {
+        this.removeNullAndUndefinedProperties(obj[key]);
+      }
+    });
     return obj;
   }
 }
