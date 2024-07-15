@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class IndicatorValueDto {
+export class IndicatorsValueDto {
   @ApiProperty({ example: 37591.0, description: 'El valor en decimal del indicador.' })
   value: number;
   @ApiProperty({ example: '2024-06-29', description: 'Fecha a la que corresponde el valor del indicador.' })

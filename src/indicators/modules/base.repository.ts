@@ -2,12 +2,13 @@ import { Model, Document } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { BaseRepositoryInterface } from '../interfaces/base-repository.interface';
 import { AggregationResult } from '../interfaces/aggregation-result.interface';
+import { IndicatorsEnum } from './indicators.enum';
 
 @Injectable()
 export abstract class BaseRepository<T extends Document> implements BaseRepositoryInterface<T> {
   protected constructor(protected readonly model: Model<T>) {}
 
-  async findCurrentOrLastDayRecord(indicator: string): Promise<T> {
+  async findCurrentOrLastDayRecord(indicator: IndicatorsEnum): Promise<T> {
     const formattedDate = new Date().toISOString().split('T')[0];
     return this.model
       .findOne({
@@ -18,7 +19,7 @@ export abstract class BaseRepository<T extends Document> implements BaseReposito
       .exec();
   }
 
-  async findFirstRecordOfMonth(indicator: string): Promise<T> {
+  async findFirstRecordOfMonth(indicator: IndicatorsEnum): Promise<T> {
     const now = new Date();
     const date = new Date(now.getUTCFullYear(), now.getUTCMonth(), 1).toISOString().split('T')[0];
 
@@ -30,7 +31,7 @@ export abstract class BaseRepository<T extends Document> implements BaseReposito
       .exec();
   }
 
-  async calculateAverageValueOfMonth(indicator: string): Promise<number> {
+  async calculateAverageValueOfMonth(indicator: IndicatorsEnum): Promise<number> {
     const { startOfMonth, endOfMonth } = this.getMonthBounds();
 
     const results = await this.model.aggregate<AggregationResult>([
@@ -51,7 +52,7 @@ export abstract class BaseRepository<T extends Document> implements BaseReposito
     return this.parseAggregateResult(results);
   }
 
-  async findLastRecordOfMonth(indicator: string): Promise<T> {
+  async findLastRecordOfMonth(indicator: IndicatorsEnum): Promise<T> {
     const now = new Date();
     const endOfMonth = new Date(now.getUTCFullYear(), now.getUTCMonth() + 1, 0).toISOString().split('T')[0];
     return this.model
@@ -63,7 +64,7 @@ export abstract class BaseRepository<T extends Document> implements BaseReposito
       .exec();
   }
 
-  async calculateAccumulatedValueLast12Months(indicator: string): Promise<number> {
+  async calculateAccumulatedValueLast12Months(indicator: IndicatorsEnum): Promise<number> {
     const lastRecord = await this.model.findOne({ indicator }).sort({ date: -1 }).exec();
 
     if (!lastRecord) {
@@ -95,7 +96,7 @@ export abstract class BaseRepository<T extends Document> implements BaseReposito
     return this.parseAggregateResult(results);
   }
 
-  async calculateYearlyAccumulatedValue(indicator: string): Promise<number> {
+  async calculateYearlyAccumulatedValue(indicator: IndicatorsEnum): Promise<number> {
     const { startOfYear, endOfYear } = this.getYearBounds();
 
     const results = await this.model.aggregate<AggregationResult>([

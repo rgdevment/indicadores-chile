@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class IndicatorBaseResponseDto {
+export class IndicatorsBaseResponseDto {
   @ApiProperty({ example: 'UF', description: 'El nombre o tipo de indicador.' })
   indicator: string;
 

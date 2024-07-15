@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 import { EconomicRepository } from './economic.repository';
-import { IndicatorRecord } from '../../interfaces/indicator-record.interface';
-import { IndicatorValueDto } from '../../dto/indicator-value.dto';
-import { EconomicEnum } from './economic.enum';
-import { IndicatorResponseDto } from '../../dto/indicator-response.dto';
+import { IndicatorsRecord } from '../../interfaces/indicators-record.interface';
+import { IndicatorsValueDto } from '../../dto/indicators-value.dto';
+import { IndicatorsResponseDto } from '../../dto/indicators-response.dto';
+import { IndicatorsEnum } from '../indicators.enum';
 
 @Injectable()
 export class EconomicService {
@@ -14,9 +14,9 @@ export class EconomicService {
   ) {}
 
   private async getIndicatorValueDto(
-    indicatorRecord: IndicatorRecord | null,
+    indicatorRecord: IndicatorsRecord | null,
     noteKey: string,
-  ): Promise<IndicatorValueDto> {
+  ): Promise<IndicatorsValueDto> {
     if (!indicatorRecord) {
       throw new NotFoundException(
         this.i18n.t('indicators.INDICATOR_NOT_FOUND', {
@@ -24,7 +24,7 @@ export class EconomicService {
         }),
       );
     }
-    return new IndicatorValueDto(
+    return new IndicatorsValueDto(
       indicatorRecord.value,
       new Date(indicatorRecord.date),
       indicatorRecord.value_to_word,
@@ -32,7 +32,7 @@ export class EconomicService {
     );
   }
 
-  async retrieveDetailsIPCIndicator(indicator: EconomicEnum): Promise<IndicatorResponseDto> {
+  async retrieveDetailsIPCIndicator(indicator: IndicatorsEnum): Promise<IndicatorsResponseDto> {
     const currentIndicator = await this.repository.findCurrentOrLastDayRecord(indicator);
     const accumulatedYearly = await this.repository.calculateAccumulatedValueLast12Months(indicator);
     const accumulated = await this.repository.calculateYearlyAccumulatedValue(indicator);
@@ -43,7 +43,7 @@ export class EconomicService {
       throw new NotFoundException(this.i18n.t('indicators.INDICATOR_NOT_FOUND', { args: { indicator } }));
     }
 
-    return new IndicatorResponseDto({
+    return new IndicatorsResponseDto({
       indicator,
       data: [current],
       accumulated,
@@ -51,7 +51,7 @@ export class EconomicService {
     });
   }
 
-  async retrieveDetailsUFIndicator(indicator: EconomicEnum): Promise<IndicatorResponseDto> {
+  async retrieveDetailsUFIndicator(indicator: IndicatorsEnum): Promise<IndicatorsResponseDto> {
     const currentIndicator = await this.repository.findCurrentOrLastDayRecord(indicator);
     const firstIndicator = await this.repository.findFirstRecordOfMonth(indicator);
     const average = await this.repository.calculateAverageValueOfMonth(indicator);
@@ -65,21 +65,21 @@ export class EconomicService {
       throw new NotFoundException(this.i18n.t('indicators.INDICATOR_NOT_FOUND', { args: { indicator } }));
     }
 
-    return new IndicatorResponseDto({
+    return new IndicatorsResponseDto({
       indicator,
       data: [current, first, last],
       average: average,
     });
   }
 
-  async findCurrentIndicator(indicator: EconomicEnum): Promise<IndicatorResponseDto> {
+  async findCurrentIndicator(indicator: IndicatorsEnum): Promise<IndicatorsResponseDto> {
     const currentIndicator = await this.repository.findCurrentOrLastDayRecord(indicator);
     const current = await this.getIndicatorValueDto(currentIndicator, 'indicators.CURRENT_VALUE_NOTE');
     if (!current) {
       throw new NotFoundException(this.i18n.t('indicators.INDICATOR_NOT_FOUND', { args: { indicator } }));
     }
 
-    return new IndicatorResponseDto({
+    return new IndicatorsResponseDto({
       indicator,
       data: [current],
     });
