@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { IndicatorsModule } from './indicators/indicators.module';
+import { IndicatorsModule } from './indicators/modules/indicators.module';
 import path from 'node:path';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { MongooseModule } from '@nestjs/mongoose';

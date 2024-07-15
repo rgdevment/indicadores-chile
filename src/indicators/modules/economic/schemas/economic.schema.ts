@@ -1,9 +1,8 @@
-// src/indicators/economic/schemas/economic-indicator.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema()
-export class EconomicIndicator extends Document {
+export class Economic extends Document {
   @Prop({ required: true })
   type: string;
 
@@ -20,4 +19,4 @@ export class EconomicIndicator extends Document {
   update_at: Date;
 }
 
-export const EconomicIndicatorSchema = SchemaFactory.createForClass(EconomicIndicator);
+export const EconomicSchema = SchemaFactory.createForClass(Economic);
