@@ -5,7 +5,7 @@ import { AggregationResult } from '../interfaces/aggregation-result.interface';
 import { IndicatorsEnum } from './indicators.enum';
 
 @Injectable()
-export abstract class BaseRepository<T extends Document> implements BaseRepositoryInterface<T> {
+export abstract class IndicatorsRepository<T extends Document> implements BaseRepositoryInterface<T> {
   protected constructor(protected readonly model: Model<T>) {}
 
   async findCurrentOrLastDayRecord(indicator: IndicatorsEnum): Promise<T> {

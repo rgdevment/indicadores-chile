@@ -4,10 +4,10 @@ import { Model } from 'mongoose';
 
 import { Economic } from './schemas/economic.schema';
 import { EconomicDocument } from './interfaces/economic.interface';
-import { BaseRepository } from '../base.repository';
+import { IndicatorsRepository } from '../indicators.repository';
 
 @Injectable()
-export class EconomicRepository extends BaseRepository<EconomicDocument> {
+export class EconomicRepository extends IndicatorsRepository<EconomicDocument> {
   constructor(@InjectModel(Economic.name) model: Model<EconomicDocument>) {
     super(model);
   }
