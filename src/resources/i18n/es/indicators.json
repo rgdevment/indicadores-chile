@@ -1,7 +1,7 @@
 {
-  "CURRENT_VALUE_NOTE": "Valor actualizado al día de hoy.",
+  "CURRENT_VALUE_NOTE": "Valor actualizado al día de hoy, o del ultimo registro disponible.",
   "FIRST_DAY_MONTH_NOTE": "Valor del primer día del mes.",
-  "LAST_RECORD_VALUE_NOTE": "Valor del último día del mes, o el último valor registrado.",
+  "LAST_RECORD_VALUE_NOTE": "Valor del último día del mes, o el último valor registrado en el mes.",
   "INDICATOR_NOT_FOUND": "No se encontró información para el indicador {indicator} en la fecha actual.",
   "INVALID_INDICATOR_VALUE": "{value} no es un valor de indicador admitido."
 }

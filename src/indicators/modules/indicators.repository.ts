@@ -19,20 +19,26 @@ export abstract class IndicatorsRepository<T extends Document> implements BaseRe
       .exec();
   }
 
-  async findFirstRecordOfMonth(indicator: IndicatorsEnum): Promise<T> {
-    const now = new Date();
-    const date = new Date(now.getUTCFullYear(), now.getUTCMonth(), 1).toISOString().split('T')[0];
+  async findFirstRecordOfMonth(indicator: IndicatorsEnum, now: Date = new Date()): Promise<T> {
+    let day = 1;
+    let record: T | null = null;
 
-    return this.model
-      .findOne({
-        indicator,
-        date,
-      })
-      .exec();
+    while (!record && day <= 31) {
+      const date = new Date(now.getUTCFullYear(), now.getUTCMonth(), day).toISOString().split('T')[0];
+      record = await this.model
+        .findOne({
+          indicator,
+          date,
+        })
+        .exec();
+      day++;
+    }
+
+    return record;
   }
 
-  async calculateAverageValueOfMonth(indicator: IndicatorsEnum): Promise<number> {
-    const { startOfMonth, endOfMonth } = this.getMonthBounds();
+  async calculateAverageValueOfMonth(indicator: IndicatorsEnum, date: Date = new Date()): Promise<number> {
+    const { startOfMonth, endOfMonth } = this.getMonthBounds(date);
 
     const results = await this.model.aggregate<AggregationResult>([
       {
@@ -52,8 +58,7 @@ export abstract class IndicatorsRepository<T extends Document> implements BaseRe
     return this.parseAggregateResult(results);
   }
 
-  async findLastRecordOfMonth(indicator: IndicatorsEnum): Promise<T> {
-    const now = new Date();
+  async findLastRecordOfMonth(indicator: IndicatorsEnum, now: Date = new Date()): Promise<T> {
     const endOfMonth = new Date(now.getUTCFullYear(), now.getUTCMonth() + 1, 0).toISOString().split('T')[0];
     return this.model
       .findOne({
@@ -117,8 +122,7 @@ export abstract class IndicatorsRepository<T extends Document> implements BaseRe
     return this.parseAggregateResult(results);
   }
 
-  protected getMonthBounds(): { startOfMonth: Date; endOfMonth: Date } {
-    const now = new Date();
+  protected getMonthBounds(now: Date = new Date()): { startOfMonth: Date; endOfMonth: Date } {
     const startOfMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0));
     const endOfMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0, 23, 59, 59, 999));
 

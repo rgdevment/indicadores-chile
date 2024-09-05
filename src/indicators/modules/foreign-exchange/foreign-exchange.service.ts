@@ -15,12 +15,13 @@ export class ForeignExchangeService {
 
   private async getIndicatorValueDto(
     indicatorRecord: IndicatorsRecord | null,
+    indicator: string,
     noteKey: string,
   ): Promise<IndicatorsValueDto> {
     if (!indicatorRecord) {
       throw new NotFoundException(
         this.i18n.t('indicators.INDICATOR_NOT_FOUND', {
-          args: { indicator: indicatorRecord },
+          args: { indicator: indicator },
         }),
       );
     }
@@ -34,15 +35,11 @@ export class ForeignExchangeService {
 
   async retrieveDetailsFxIndicator(indicator: IndicatorsEnum): Promise<IndicatorsResponseDto> {
     const currentIndicator = await this.repository.findCurrentOrLastDayRecord(indicator);
-    const firstIndicator = await this.repository.findFirstRecordOfMonth(indicator);
-    const average = await this.repository.calculateAverageValueOfMonth(indicator);
+    const firstIndicator = await this.repository.findFirstRecordOfMonth(indicator, currentIndicator.date);
+    const average = await this.repository.calculateAverageValueOfMonth(indicator, currentIndicator.date);
 
-    const current = await this.getIndicatorValueDto(currentIndicator, 'indicators.CURRENT_VALUE_NOTE');
-    const first = await this.getIndicatorValueDto(firstIndicator, 'indicators.FIRST_DAY_MONTH_NOTE');
-
-    if (!current || !first) {
-      throw new NotFoundException(this.i18n.t('indicators.INDICATOR_NOT_FOUND', { args: { indicator } }));
-    }
+    const current = await this.getIndicatorValueDto(currentIndicator, indicator, 'indicators.CURRENT_VALUE_NOTE');
+    const first = await this.getIndicatorValueDto(firstIndicator, indicator, 'indicators.FIRST_DAY_MONTH_NOTE');
 
     return new IndicatorsResponseDto({
       indicator,
