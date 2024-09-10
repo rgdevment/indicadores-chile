@@ -22,7 +22,7 @@ export class IndicatorsController {
     description: 'Recopila y procesa información sobre el indicador solicitado.',
   })
   @ApiResponse({ status: 200, description: 'Success', type: IndicatorsResponseDto })
-  async getForeignExchange(@Param('indicator', IndicatorsParsePipe) indicator: IndicatorsEnum) {
+  async indicators(@Param('indicator', IndicatorsParsePipe) indicator: IndicatorsEnum) {
     if (indicator === IndicatorsEnum.UF) {
       return await this.economicService.retrieveDetailsUFIndicator(indicator);
     } else if (indicator === IndicatorsEnum.IPC) {

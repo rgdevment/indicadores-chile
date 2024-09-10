@@ -17,7 +17,6 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
     "sonarqube-scanner": "sonar-scanner"
   },
   "dependencies": {
@@ -63,15 +62,26 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "roots": [
+      "<rootDir>/test"
+    ],
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
+    "collectCoverage": true,
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
+    "moduleNameMapper": {
+      "^@modules/(.*)$": "<rootDir>/src/indicators/modules/$1"
+    },
+    "coverageDirectory": "./coverage",
+    "coverageReporters": ["text", "lcov", "html"],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/src/resources/*"
+    ],
     "testEnvironment": "node"
   },
   "packageManager": "yarn@4.4.0"

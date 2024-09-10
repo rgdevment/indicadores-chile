@@ -122,7 +122,7 @@ export abstract class IndicatorsRepository<T extends Document> implements BaseRe
     return this.parseAggregateResult(results);
   }
 
-  protected getMonthBounds(now: Date = new Date()): { startOfMonth: Date; endOfMonth: Date } {
+  protected getMonthBounds(now: Date): { startOfMonth: Date; endOfMonth: Date } {
     const startOfMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0));
     const endOfMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0, 23, 59, 59, 999));
 

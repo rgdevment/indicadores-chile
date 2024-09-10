@@ -1,4 +1,4 @@
-import { IndicatorsEnum } from '../modules/indicators.enum';
+import { IndicatorsEnum } from '@modules/indicators.enum';
 
 export interface BaseRepositoryInterface<T> {
   findCurrentOrLastDayRecord(indicator: IndicatorsEnum): Promise<T>;

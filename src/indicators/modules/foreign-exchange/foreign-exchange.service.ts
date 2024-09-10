@@ -35,8 +35,8 @@ export class ForeignExchangeService {
 
   async retrieveDetailsFxIndicator(indicator: IndicatorsEnum): Promise<IndicatorsResponseDto> {
     const currentIndicator = await this.repository.findCurrentOrLastDayRecord(indicator);
-    const firstIndicator = await this.repository.findFirstRecordOfMonth(indicator, currentIndicator.date);
-    const average = await this.repository.calculateAverageValueOfMonth(indicator, currentIndicator.date);
+    const firstIndicator = await this.repository.findFirstRecordOfMonth(indicator, currentIndicator?.date ?? undefined);
+    const average = await this.repository.calculateAverageValueOfMonth(indicator, currentIndicator?.date ?? undefined);
 
     const current = await this.getIndicatorValueDto(currentIndicator, indicator, 'indicators.CURRENT_VALUE_NOTE');
     const first = await this.getIndicatorValueDto(firstIndicator, indicator, 'indicators.FIRST_DAY_MONTH_NOTE');

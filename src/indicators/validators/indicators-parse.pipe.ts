@@ -1,5 +1,5 @@
 import { PipeTransform, Injectable, BadRequestException, Logger } from '@nestjs/common';
-import { IndicatorsEnum } from '../modules/indicators.enum';
+import { IndicatorsEnum } from '@modules/indicators.enum';
 import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
