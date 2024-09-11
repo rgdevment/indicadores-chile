@@ -23,17 +23,17 @@ jobs:
         run: |
           gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
           gcloud config set run/region ${{ secrets.GCP_REGION }}
-          gcloud auth configure-docker gcr.io
+          gcloud auth configure-docker us-central1-docker.pkg.dev
 
       - name: Build and push Docker image
         run: |
-          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.REPO_NAME }}/${{ secrets.SERVICE_NAME }}:latest .
-          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.REPO_NAME }}/${{ secrets.SERVICE_NAME }}:latest
+          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.SERVICE_NAME }}/${{ secrets.SERVICE_NAME }}:latest .
+          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.SERVICE_NAME }}/${{ secrets.SERVICE_NAME }}:latest
 
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy ${{ secrets.SERVICE_NAME }} \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.SERVICE_NAME }}:latest \
+            --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.SERVICE_NAME }}/${{ secrets.SERVICE_NAME }}:latest \
             --platform managed \
             --region ${{ secrets.GCP_REGION }} \
             --allow-unauthenticated \
