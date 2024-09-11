@@ -58,6 +58,7 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # Yarn Plug'n'Play
 .pnp.*
 .yarn/*
+/.yarn/*
 !.yarn/patches
 !.yarn/releases
 !.yarn/plugins
