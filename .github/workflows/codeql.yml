@@ -43,7 +43,7 @@ jobs:
 
       - name: Build project
         run: |
-          yarn install --frozen-lockfile
+          yarn install --immutable
           yarn build
 
       - name: Perform CodeQL Analysis

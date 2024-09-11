@@ -1,7 +1,7 @@
 {
   "name": "indicadores-chile",
   "version": "0.0.1",
-  "description": "",
+  "description": "Indicadores económicos y monetarios en Chile",
   "author": "",
   "private": true,
   "license": "MIT License",
@@ -18,7 +18,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "sonarqube-scanner": "sonar-scanner"
+    "sonarqube-scanner": "sonar-scanner",
+    "docker:build": "docker build -t indicadores-chile .",
+    "docker:run": "docker run -p 3000:3000 indicadores-chile"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
