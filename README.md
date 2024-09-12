@@ -10,6 +10,10 @@ Este proyecto proporciona una API REST gratuita y de código abierto para consul
 
 ## Endpoints disponibles (Leer documentación)
 
+### Documentación
+
+- [API Swagger](https://indicadores.apirest.cl/api)
+
 ### Indicadores Económicos y Financieros (Ejemplos)
 
 - **UF**: Unidad de Fomento (UF) actualizada diariamente.
@@ -42,7 +46,7 @@ Aquí tienes un ejemplo en `curl` para obtener el valor de la UF:
 
 - Asegúrate de manejar correctamente las respuestas HTTP.
 - Los datos son actualizados diariamente, por lo que siempre tendrás acceso a la información más reciente.
-- Usa librerías como `axios`, `fetch` o similares para integrar el API en tus proyectos.
+- Usa librerías como `axios`, `fetch` o similares para integrar la API en tus proyectos.
 
 ## Instrucciones para instalación local
 
