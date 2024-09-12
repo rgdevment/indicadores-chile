@@ -1,15 +1,19 @@
 import { IndicatorsValueDto } from './indicators-value.dto';
 import { IndicatorsBaseResponseDto } from './indicators-base-response.dto';
 import { Expose } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class IndicatorsResponseDto extends IndicatorsBaseResponseDto {
+  @ApiProperty({ type: [IndicatorsValueDto], description: 'Lista de valores del indicador en diferentes periodos.' })
   data: IndicatorsValueDto[];
-  @ApiProperty({ example: 123.45, description: 'El promedio del mes en curso del indicador.' })
+
+  @ApiPropertyOptional({ example: 123.45, description: 'El promedio del mes en curso del indicador.' })
   average?: number;
-  @ApiProperty({ example: 123.45, description: 'El valor acumulado del año actual del indicador.' })
+
+  @ApiPropertyOptional({ example: 123.45, description: 'El valor acumulado del año actual del indicador.' })
   accumulated?: number;
-  @ApiProperty({ example: 123.45, description: 'El valor acumulado de los últimos 12 meses.' })
+
+  @ApiPropertyOptional({ example: 123.45, description: 'El valor acumulado de los últimos 12 meses.' })
   @Expose({ name: 'accumulated_yearly' })
   accumulatedYearly?: number;
 

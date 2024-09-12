@@ -3,13 +3,16 @@ import { ApiProperty } from '@nestjs/swagger';
 export class IndicatorsValueDto {
   @ApiProperty({ example: 37591.0, description: 'El valor en decimal del indicador.' })
   value: number;
+
   @ApiProperty({ example: '2024-06-29', description: 'Fecha a la que corresponde el valor del indicador.' })
   date: string;
+
   @ApiProperty({
     example: 'treinta y siete mil seiscientos dos pesos',
     description: 'El valor del indicador en texto.',
   })
   details: string;
+
   _note?: string;
 
   constructor(value: number, date: Date, value_to_word: string, _note?: string) {
