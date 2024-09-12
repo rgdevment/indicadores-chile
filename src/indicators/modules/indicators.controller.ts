@@ -100,8 +100,21 @@ export class IndicatorsController {
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Indicador no válido' })
-  @ApiResponse({ status: 404, description: 'Indicador no encontrado' })
+  @ApiResponse({
+    status: 400,
+    description: 'Indicador no válido',
+    content: {
+      'application/json': {
+        example: {
+          statusCode: 400,
+          timestamp: '2024-09-12T13:55:18.060Z',
+          path: '/v1/utme',
+          method: 'GET',
+          message: 'null no es un valor de indicador admitido.',
+        },
+      },
+    },
+  })
   async indicators(@Param('indicator', IndicatorsParsePipe) indicator: IndicatorsEnum) {
     if (indicator === IndicatorsEnum.UF) {
       return await this.economicService.retrieveDetailsUFIndicator(indicator);
