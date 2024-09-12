@@ -14,7 +14,8 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Indicadores Chile API')
     .setDescription('API Open-Source con Indicadores económicos, financieros, previsionales y salariales para CHILE')
-    .setVersion('1.0')
+    .setVersion('1.1')
+    .setLicense('MIT', 'https://opensource.org/licenses/MIT')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
