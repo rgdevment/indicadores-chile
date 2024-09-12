@@ -22,7 +22,7 @@ export class IndicatorsController {
   })
   @ApiParam({
     name: 'indicator',
-    description: 'Indicador económico a obtener (UF, IPC, DÓLAR, EURO, etc.)',
+    description: 'Indicador económico a obtener.',
     enum: IndicatorsEnum,
     required: true,
   })
