@@ -96,8 +96,7 @@ Las donaciones se destinarán exclusivamente a cubrir los costos de infraestruct
 
 ¡Cualquier aporte es bienvenido y ayudará a mantener el servicio activo y disponible para todos!
 
-
-[¡Haz tu donación aquí!](https://tu-enlace-de-donaciones)
+link: soon!
 
 ## Licencia
 
