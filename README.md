@@ -1,5 +1,6 @@
 # API de Indicadores Económicos y Financieros de Chile
 
+[![Sponsor rgdevment](https://img.shields.io/badge/Sponsor-rgdevment-blue?logo=github)](https://github.com/sponsors/rgdevment)
 [![Build CI](https://github.com/rgdevment/indicadores-chile/actions/workflows/main.yml/badge.svg)](https://github.com/rgdevment/indicadores-chile/actions/workflows/main.yml)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=rgdevment_indicadores-chile&metric=coverage)](https://sonarcloud.io/dashboard?id=rgdevment_indicadores-chile)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=rgdevment_indicadores-chile&metric=alert_status)](https://sonarcloud.io/dashboard?id=rgdevment_indicadores-chile)
@@ -88,7 +89,7 @@ Este proyecto es mantenido de manera gratuita para todos. Si encuentras útil es
 
 Las donaciones se destinarán exclusivamente a cubrir los costos de infraestructura, que incluyen:
 
-- **Clusters en Google Cloud Run**: Este es el servicio que aloja y ejecuta la API. Los costos incluyen el uso de CPU, memoria y tiempo de ejecución de la API.
+- **Google Cloud Run**: Este es el servicio que aloja y ejecuta la API. Los costos incluyen el uso de CPU, memoria y tiempo de ejecución de la API.
 - **Dominio**: Los costos del registro y mantenimiento del dominio `apirest.cl` y `restapi.cl`.
 - **Almacenamiento**: En caso de que sea necesario, se cubrirán los costos de almacenamiento en bases de datos externas o servicios asociados.
 - **Tráfico de red**: Cualquier costo adicional relacionado con el uso de red y transferencia de datos.
@@ -96,7 +97,7 @@ Las donaciones se destinarán exclusivamente a cubrir los costos de infraestruct
 
 ¡Cualquier aporte es bienvenido y ayudará a mantener el servicio activo y disponible para todos!
 
-link: soon!
+Considera [ser un patrocinador](https://github.com/sponsors/rgdevment). ¡Gracias por tu apoyo!
 
 ## Licencia
 
