@@ -80,7 +80,11 @@
       "^@modules/(.*)$": "<rootDir>/src/indicators/modules/$1"
     },
     "coverageDirectory": "./coverage",
-    "coverageReporters": ["text", "lcov", "html"],
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/src/resources/*"
