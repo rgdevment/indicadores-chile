@@ -12,7 +12,7 @@ Este proyecto proporciona una API REST gratuita y de código abierto para consul
 
 ### Documentación
 
-- [API Swagger](https://indicadores.apirest.cl/api)
+- [Documentación Swagger](https://indicadores.apirest.cl/v1/docs)
 
 ### Indicadores Económicos y Financieros (Ejemplos)
 
@@ -60,7 +60,7 @@ Si quieres probar el proyecto localmente o montarlo en tu propio entorno, sigue 
 ### Instalación
 
 1. Clona el repositorio:
-    - git clone https://github.com/tu-usuario/indicadores-chile.git
+    - git clone https://github.com/rgdevment/indicadores-chile.git
     - cd indicadores-chile
 
 2. Instala las dependencias:
