@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-export interface ForeignExchangeDocument extends Document {
+export interface CurrencyDocument extends Document {
   indicator: string;
   value: number;
   value_to_word: string;

@@ -4,7 +4,7 @@ import { NotFoundException } from '@nestjs/common';
 import { ForeignExchangeService } from '@modules/foreign-exchange/foreign-exchange.service';
 import { ForeignExchangeRepository } from '@modules/foreign-exchange/foreign-exchange.repository';
 import { IndicatorsEnum } from '@modules/indicators.enum';
-import { IndicatorsValueDto } from '../../../../src/indicators/dto/indicators-value.dto';
+import { IndicatorsValueDto } from '../../../../backup/indicators/dto/indicators-value.dto';
 
 describe('ForeignExchangeService', () => {
   let service: ForeignExchangeService;

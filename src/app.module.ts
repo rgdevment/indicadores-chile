@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
-import { IndicatorsModule } from '@modules/indicators.module';
 import { join } from 'path';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CurrenciesModule } from '@modules/currencies/currencies.module';
+import { EconomicsModule } from '@modules/economics/economics.module';
+import { SalariesModule } from '@modules/salaries/salaries.module';
 
 @Module({
   imports: [
-    IndicatorsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
@@ -27,6 +28,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       },
       resolvers: [new HeaderResolver([])],
     }),
+    CurrenciesModule,
+    EconomicsModule,
+    SalariesModule,
   ],
   controllers: [],
   providers: [],

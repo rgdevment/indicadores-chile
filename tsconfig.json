@@ -15,7 +15,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@modules/*": ["src/indicators/modules/*"]
+      "@modules/*": ["src/modules/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

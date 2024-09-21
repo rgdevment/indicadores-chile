@@ -1,7 +1,7 @@
 import { BadRequestException, Logger } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 import { IndicatorsEnum } from '@modules/indicators.enum';
-import { IndicatorsParsePipe } from '../../../../src/indicators/validators/indicators-parse.pipe';
+import { IndicatorsParsePipe } from '../../../../backup/indicators/validators/indicators-parse.pipe';
 
 describe('IndicatorsParsePipe', () => {
   let pipe: IndicatorsParsePipe;

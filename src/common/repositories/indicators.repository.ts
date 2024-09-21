@@ -1,11 +1,11 @@
-import { Model, Document } from 'mongoose';
+import { Document, Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { BaseRepositoryInterface } from '../interfaces/base-repository.interface';
+import { IndicatorsRepositoryInterface } from './indicators.repository.interface';
 import { AggregationResult } from '../interfaces/aggregation-result.interface';
-import { IndicatorsEnum } from './indicators.enum';
+import { IndicatorsEnum } from '../enums/indicators.enum';
 
 @Injectable()
-export abstract class IndicatorsRepository<T extends Document> implements BaseRepositoryInterface<T> {
+export abstract class IndicatorsRepository<T extends Document> implements IndicatorsRepositoryInterface<T> {
   protected constructor(protected readonly model: Model<T>) {}
 
   async findCurrentOrLastDayRecord(indicator: IndicatorsEnum): Promise<T> {

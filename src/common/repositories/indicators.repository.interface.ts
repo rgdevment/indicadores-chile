@@ -1,11 +1,11 @@
-import { IndicatorsEnum } from '@modules/indicators.enum';
+import { IndicatorsEnum } from '../enums/indicators.enum';
 
-export interface BaseRepositoryInterface<T> {
+export interface IndicatorsRepositoryInterface<T> {
   findCurrentOrLastDayRecord(indicator: IndicatorsEnum): Promise<T>;
 
-  findFirstRecordOfMonth(indicator: IndicatorsEnum): Promise<T>;
+  findFirstRecordOfMonth(indicator: IndicatorsEnum, now?: Date): Promise<T>;
 
-  calculateAverageValueOfMonth(indicator: IndicatorsEnum): Promise<number>;
+  calculateAverageValueOfMonth(indicator: IndicatorsEnum, date?: Date): Promise<number>;
 
   findLastRecordOfMonth(indicator: IndicatorsEnum): Promise<T>;
 

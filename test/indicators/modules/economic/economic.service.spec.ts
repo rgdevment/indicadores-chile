@@ -4,7 +4,7 @@ import { NotFoundException } from '@nestjs/common';
 import { EconomicService } from '@modules/economic/economic.service';
 import { EconomicRepository } from '@modules/economic/economic.repository';
 import { IndicatorsEnum } from '@modules/indicators.enum';
-import { IndicatorsValueDto } from '../../../../src/indicators/dto/indicators-value.dto';
+import { IndicatorsValueDto } from '../../../../backup/indicators/dto/indicators-value.dto';
 
 describe('EconomicService', () => {
   let service: EconomicService;
