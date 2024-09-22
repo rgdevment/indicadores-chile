@@ -1,14 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ExcludeNullInterceptor } from './common/interceptors/exclude-null.interceptor';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from '@nestjs/common';
+import { ExcludeNullInterceptor } from '@interceptors/exclude-null.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: ['log', 'error', 'warn', 'debug', 'verbose'],
   });
 
+  app.setGlobalPrefix('v1');
   app.useGlobalInterceptors(new ExcludeNullInterceptor());
 
   app.use((req: { path: string }, res: { redirect: (arg0: number, arg1: string) => void }, next: () => void) => {

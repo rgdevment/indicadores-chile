@@ -15,7 +15,11 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@modules/*": ["src/indicators/modules/*"]
+      "@modules/*": ["src/modules/*"],
+      "@filters/*": ["src/filters/*"],
+      "@interceptors/*": ["src/interceptors/*"],
+      "@common/*": ["src/common/*"],
+      "@resources/*": ["src/resources/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
