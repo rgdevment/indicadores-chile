@@ -1,8 +1,8 @@
 import { Controller, Get, Param, UseFilters } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrenciesService } from '@modules/currencies/currencies.service';
-import { GlobalExceptionFilter } from '../../common/filters/global-exception.filter';
-import { CurrenciesEnum } from '../../common/enums/currencies.enum';
+import { GlobalExceptionFilter } from '@filters/global-exception.filter';
+import { CurrenciesEnum } from './enums/currencies.enum';
 import { CurrenciesParsePipe } from '@modules/currencies/validators/currencies-parse.pipe';
 import { CurrenciesResponseDto } from '@modules/currencies/dto/currency-response.dto';
 

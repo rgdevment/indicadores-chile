@@ -77,7 +77,11 @@
       "**/*.(t|j)s"
     ],
     "moduleNameMapper": {
-      "^@modules/(.*)$": "<rootDir>/src/modules/$1"
+      "^@modules/(.*)$": "<rootDir>/src/modules/$1",
+      "^@filters/(.*)$": "<rootDir>/src/filters/$1",
+      "^@interceptors/(.*)$": "<rootDir>/src/interceptors/$1",
+      "^@common/(.*)$": "<rootDir>/src/common/$1",
+      "^@resources/(.*)$": "<rootDir>/src/resources/$1"
     },
     "coverageDirectory": "./coverage",
     "coverageReporters": [

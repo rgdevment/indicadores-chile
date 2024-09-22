@@ -2,9 +2,9 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CurrencyRepository } from '@modules/currencies/repositories/currency.repository.interface';
 import { I18nService } from 'nestjs-i18n';
 import { CurrenciesResponseDto } from '@modules/currencies/dto/currency-response.dto';
-import { IndicatorsRecord } from '../../common/interfaces/indicators-record.interface';
+import { IndicatorsRecord } from '@common/interfaces/indicators-record.interface';
 import { CurrencyValueDto } from '@modules/currencies/dto/currency-value.dto';
-import { CurrenciesEnum } from '../../common/enums/currencies.enum';
+import { CurrenciesEnum } from './enums/currencies.enum';
 
 @Injectable()
 export class CurrenciesService {

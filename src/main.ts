@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from '@nestjs/common';
-import { ExcludeNullInterceptor } from './common/interceptors/exclude-null.interceptor';
+import { ExcludeNullInterceptor } from '@interceptors/exclude-null.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {

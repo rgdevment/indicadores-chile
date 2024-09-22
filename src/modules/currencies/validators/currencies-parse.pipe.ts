@@ -1,6 +1,6 @@
-import { PipeTransform, Injectable, BadRequestException, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, PipeTransform } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
-import { CurrenciesEnum } from '../../../common/enums/currencies.enum';
+import { CurrenciesEnum } from '../enums/currencies.enum';
 
 @Injectable()
 export class CurrenciesParsePipe implements PipeTransform<string, CurrenciesEnum> {
