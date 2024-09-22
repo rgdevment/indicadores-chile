@@ -18,7 +18,7 @@ export class CurrenciesResponseDto {
     description: 'Listado de los valores actuales y el primer valor del mes',
     type: [CurrencyValueDto],
   })
-  data: CurrencyValueDto[];
+  records: CurrencyValueDto[];
 
   constructor(partial: Partial<CurrenciesResponseDto>) {
     Object.assign(this, partial);

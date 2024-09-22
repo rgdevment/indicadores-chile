@@ -1,10 +1,10 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CurrencyRepository } from '@modules/currencies/repositories/currency.repository.interface';
-import { IndicatorsEnum } from '../../common/enums/indicators.enum';
 import { I18nService } from 'nestjs-i18n';
 import { CurrenciesResponseDto } from '@modules/currencies/dto/currency-response.dto';
 import { IndicatorsRecord } from '../../common/interfaces/indicators-record.interface';
 import { CurrencyValueDto } from '@modules/currencies/dto/currency-value.dto';
+import { CurrenciesEnum } from '../../common/enums/currencies.enum';
 
 @Injectable()
 export class CurrenciesService {
@@ -20,8 +20,8 @@ export class CurrenciesService {
   ): Promise<CurrencyValueDto> {
     if (!indicatorRecord) {
       throw new NotFoundException(
-        this.i18n.t('indicators.INDICATOR_NOT_FOUND', {
-          args: { indicator: indicator },
+        this.i18n.t('currencies.CURRENCY_NOT_FOUND', {
+          args: { currency: indicator },
         }),
       );
     }
@@ -33,7 +33,7 @@ export class CurrenciesService {
     );
   }
 
-  async retrieveDetailsCurrencyIndicator(currency: IndicatorsEnum): Promise<CurrenciesResponseDto> {
+  async retrieveDetailsCurrencyIndicator(currency: CurrenciesEnum): Promise<CurrenciesResponseDto> {
     const currentValue = await this.repository.findCurrentOrLastDayRecord(currency);
     const firstIndicator = await this.repository.findFirstRecordOfMonth(currency, currentValue?.date ?? new Date());
     const average = await this.repository.calculateAverageValueOfMonth(currency, currentValue?.date ?? new Date());
@@ -44,7 +44,7 @@ export class CurrenciesService {
     return new CurrenciesResponseDto({
       currency,
       average: average,
-      data: [current, first],
+      records: [current, first],
     });
   }
 }

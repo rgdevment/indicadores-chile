@@ -1,0 +1,4 @@
+{
+  "CURRENCY_NOT_FOUND": "No se encontró información para la divisa {currency} en el periodo solicitado.",
+  "INVALID_CURRENCY_VALUE": "{value} no es una divisa admitida o soportada por nuestra API."
+}

@@ -2,13 +2,13 @@ import { Document, Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { IndicatorsRepositoryInterface } from './indicators.repository.interface';
 import { AggregationResult } from '../interfaces/aggregation-result.interface';
-import { IndicatorsEnum } from '../enums/indicators.enum';
+import { IndicatorsType } from '../types/indicators.type';
 
 @Injectable()
 export abstract class IndicatorsRepository<T extends Document> implements IndicatorsRepositoryInterface<T> {
   protected constructor(protected readonly model: Model<T>) {}
 
-  async findCurrentOrLastDayRecord(indicator: IndicatorsEnum): Promise<T> {
+  async findCurrentOrLastDayRecord(indicator: IndicatorsType): Promise<T> {
     const formattedDate = new Date().toISOString().split('T')[0];
     return this.model
       .findOne({
@@ -19,7 +19,7 @@ export abstract class IndicatorsRepository<T extends Document> implements Indica
       .exec();
   }
 
-  async findFirstRecordOfMonth(indicator: IndicatorsEnum, now: Date = new Date()): Promise<T> {
+  async findFirstRecordOfMonth(indicator: IndicatorsType, now: Date = new Date()): Promise<T> {
     let day = 1;
     let record: T | null = null;
 
@@ -37,7 +37,7 @@ export abstract class IndicatorsRepository<T extends Document> implements Indica
     return record;
   }
 
-  async calculateAverageValueOfMonth(indicator: IndicatorsEnum, date: Date = new Date()): Promise<number> {
+  async calculateAverageValueOfMonth(indicator: IndicatorsType, date: Date = new Date()): Promise<number> {
     const { startOfMonth, endOfMonth } = this.getMonthBounds(date);
 
     const results = await this.model.aggregate<AggregationResult>([
@@ -58,7 +58,7 @@ export abstract class IndicatorsRepository<T extends Document> implements Indica
     return this.parseAggregateResult(results);
   }
 
-  async findLastRecordOfMonth(indicator: IndicatorsEnum, now: Date = new Date()): Promise<T> {
+  async findLastRecordOfMonth(indicator: IndicatorsType, now: Date = new Date()): Promise<T> {
     const endOfMonth = new Date(now.getUTCFullYear(), now.getUTCMonth() + 1, 0).toISOString().split('T')[0];
     return this.model
       .findOne({
@@ -69,7 +69,7 @@ export abstract class IndicatorsRepository<T extends Document> implements Indica
       .exec();
   }
 
-  async calculateAccumulatedValueLast12Months(indicator: IndicatorsEnum): Promise<number> {
+  async calculateAccumulatedValueLast12Months(indicator: IndicatorsType): Promise<number> {
     const lastRecord = await this.model.findOne({ indicator }).sort({ date: -1 }).exec();
 
     if (!lastRecord) {
@@ -101,7 +101,7 @@ export abstract class IndicatorsRepository<T extends Document> implements Indica
     return this.parseAggregateResult(results);
   }
 
-  async calculateYearlyAccumulatedValue(indicator: IndicatorsEnum): Promise<number> {
+  async calculateYearlyAccumulatedValue(indicator: IndicatorsType): Promise<number> {
     const { startOfYear, endOfYear } = this.getYearBounds();
 
     const results = await this.model.aggregate<AggregationResult>([

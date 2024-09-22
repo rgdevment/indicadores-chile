@@ -1,15 +1,15 @@
-import { IndicatorsEnum } from '../enums/indicators.enum';
+import { IndicatorsType } from '../types/indicators.type';
 
 export interface IndicatorsRepositoryInterface<T> {
-  findCurrentOrLastDayRecord(indicator: IndicatorsEnum): Promise<T>;
+  findCurrentOrLastDayRecord(indicator: IndicatorsType): Promise<T>;
 
-  findFirstRecordOfMonth(indicator: IndicatorsEnum, now?: Date): Promise<T>;
+  findFirstRecordOfMonth(indicator: IndicatorsType, now?: Date): Promise<T>;
 
-  calculateAverageValueOfMonth(indicator: IndicatorsEnum, date?: Date): Promise<number>;
+  calculateAverageValueOfMonth(indicator: IndicatorsType, date?: Date): Promise<number>;
 
-  findLastRecordOfMonth(indicator: IndicatorsEnum): Promise<T>;
+  findLastRecordOfMonth(indicator: IndicatorsType): Promise<T>;
 
-  calculateAccumulatedValueLast12Months(indicator: IndicatorsEnum): Promise<number>;
+  calculateAccumulatedValueLast12Months(indicator: IndicatorsType): Promise<number>;
 
-  calculateYearlyAccumulatedValue(indicator: IndicatorsEnum): Promise<number>;
+  calculateYearlyAccumulatedValue(indicator: IndicatorsType): Promise<number>;
 }
