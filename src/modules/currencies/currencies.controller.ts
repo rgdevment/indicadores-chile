@@ -31,6 +31,28 @@ export class CurrenciesController {
     status: 200,
     description: 'Divisa encontrada y procesada exitosamente',
     type: CurrencyResponseDto,
+    content: {
+      'application/json': {
+        example: {
+          currency: 'EURO',
+          average: 1350.78,
+          records: [
+            {
+              date: '2024-09-01',
+              value: 1350.78,
+              details: 'Mil trescientos cincuenta pesos con setenta y ocho centavos',
+              _note: 'Valor actualizado al día de hoy.',
+            },
+            {
+              date: '2024-09-15',
+              value: 1358.42,
+              details: 'Mil trescientos cincuenta y ocho pesos con cuarenta y dos centavos',
+              _note: 'Valor del primer día del mes.',
+            },
+          ],
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 400,
