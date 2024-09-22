@@ -9,19 +9,19 @@ describe('ExcludeNullInterceptor', () => {
     interceptor = new ExcludeNullInterceptor();
   });
 
-  it('should not modify data without null or undefined properties', (done) => {
+  it('should not modify data without null or undefined properties', done => {
     const context = {} as ExecutionContext;
     const callHandler: CallHandler = {
       handle: () => of({ name: 'John', age: 30 }),
     };
 
-    interceptor.intercept(context, callHandler).subscribe((result) => {
+    interceptor.intercept(context, callHandler).subscribe(result => {
       expect(result).toEqual({ name: 'John', age: 30 });
       done();
     });
   });
 
-  it('should remove null and undefined properties', (done) => {
+  it('should remove null and undefined properties', done => {
     const context = {} as ExecutionContext;
     const callHandler: CallHandler = {
       handle: () =>
@@ -33,13 +33,13 @@ describe('ExcludeNullInterceptor', () => {
         }),
     };
 
-    interceptor.intercept(context, callHandler).subscribe((result) => {
+    interceptor.intercept(context, callHandler).subscribe(result => {
       expect(result).toEqual({ name: 'John', job: 'Developer' });
       done();
     });
   });
 
-  it('should remove null and undefined properties from nested objects', (done) => {
+  it('should remove null and undefined properties from nested objects', done => {
     const context = {} as ExecutionContext;
     const callHandler: CallHandler = {
       handle: () =>
@@ -54,7 +54,7 @@ describe('ExcludeNullInterceptor', () => {
         }),
     };
 
-    interceptor.intercept(context, callHandler).subscribe((result) => {
+    interceptor.intercept(context, callHandler).subscribe(result => {
       expect(result).toEqual({
         name: 'John',
         address: {
