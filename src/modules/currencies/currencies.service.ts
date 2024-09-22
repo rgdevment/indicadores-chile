@@ -1,10 +1,10 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CurrencyRepository } from '@modules/currencies/repositories/currency.repository.interface';
 import { I18nService } from 'nestjs-i18n';
-import { CurrenciesResponseDto } from '@modules/currencies/dto/currency-response.dto';
+import { CurrencyResponseDto } from '@modules/currencies/dto/currency-response.dto';
 import { IndicatorsRecord } from '@common/interfaces/indicators-record.interface';
-import { CurrencyValueDto } from '@modules/currencies/dto/currency-value.dto';
 import { CurrenciesEnum } from './enums/currencies.enum';
+import { IndicatorValueDto } from '@common/dto/indicator-value.dto';
 
 @Injectable()
 export class CurrenciesService {
@@ -17,7 +17,7 @@ export class CurrenciesService {
     indicatorRecord: IndicatorsRecord | null,
     indicator: string,
     noteKey: string,
-  ): Promise<CurrencyValueDto> {
+  ): Promise<IndicatorValueDto> {
     if (!indicatorRecord) {
       throw new NotFoundException(
         this.i18n.t('currencies.CURRENCY_NOT_FOUND', {
@@ -25,7 +25,7 @@ export class CurrenciesService {
         }),
       );
     }
-    return new CurrencyValueDto(
+    return new IndicatorValueDto(
       new Date(indicatorRecord.date),
       indicatorRecord.value,
       indicatorRecord.value_to_word,
@@ -33,7 +33,7 @@ export class CurrenciesService {
     );
   }
 
-  async retrieveDetailsCurrencyIndicator(currency: CurrenciesEnum): Promise<CurrenciesResponseDto> {
+  async retrieveDetailsCurrencyIndicator(currency: CurrenciesEnum): Promise<CurrencyResponseDto> {
     const currentValue = await this.repository.findCurrentOrLastDayRecord(currency);
     const firstIndicator = await this.repository.findFirstRecordOfMonth(currency, currentValue?.date ?? new Date());
     const average = await this.repository.calculateAverageValueOfMonth(currency, currentValue?.date ?? new Date());
@@ -41,7 +41,7 @@ export class CurrenciesService {
     const current = await this.getCurrencyValueDto(currentValue, currency, 'indicators.CURRENT_VALUE_NOTE');
     const first = await this.getCurrencyValueDto(firstIndicator, currency, 'indicators.FIRST_DAY_MONTH_NOTE');
 
-    return new CurrenciesResponseDto({
+    return new CurrencyResponseDto({
       currency,
       average: average,
       records: [current, first],

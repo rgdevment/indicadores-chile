@@ -7,7 +7,7 @@ export interface IndicatorsRepositoryInterface<T> {
 
   calculateAverageValueOfMonth(indicator: IndicatorsType, date?: Date): Promise<number>;
 
-  findLastRecordOfMonth(indicator: IndicatorsType): Promise<T>;
+  findLastRecordOfMonth(indicator: IndicatorsType, date?: Date): Promise<T>;
 
   calculateAccumulatedValueLast12Months(indicator: IndicatorsType): Promise<number>;
 

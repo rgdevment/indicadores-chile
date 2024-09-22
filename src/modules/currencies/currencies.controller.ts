@@ -4,7 +4,7 @@ import { CurrenciesService } from '@modules/currencies/currencies.service';
 import { GlobalExceptionFilter } from '@filters/global-exception.filter';
 import { CurrenciesEnum } from './enums/currencies.enum';
 import { CurrenciesParsePipe } from '@modules/currencies/validators/currencies-parse.pipe';
-import { CurrenciesResponseDto } from '@modules/currencies/dto/currency-response.dto';
+import { CurrencyResponseDto } from '@modules/currencies/dto/currency-response.dto';
 
 @ApiTags('Divisas')
 @UseFilters(GlobalExceptionFilter)
@@ -30,7 +30,7 @@ export class CurrenciesController {
   @ApiResponse({
     status: 200,
     description: 'Divisa encontrada y procesada exitosamente',
-    type: CurrenciesResponseDto,
+    type: CurrencyResponseDto,
   })
   @ApiResponse({
     status: 400,

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CurrencyValueDto {
+export class IndicatorValueDto {
   @ApiProperty({
     description: 'La fecha en formato ISO',
     example: '2024-09-17',

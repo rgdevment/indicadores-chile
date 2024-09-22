@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CurrencyValueDto } from '@modules/currencies/dto/currency-value.dto';
+import { IndicatorValueDto } from '@common/dto/indicator-value.dto';
 
-export class CurrenciesResponseDto {
+export class CurrencyResponseDto {
   @ApiProperty({
     description: 'Moneda para la cual se calculan los valores',
     example: 'EURO',
@@ -16,11 +16,11 @@ export class CurrenciesResponseDto {
 
   @ApiProperty({
     description: 'Listado de los valores actuales y el primer valor del mes',
-    type: [CurrencyValueDto],
+    type: [IndicatorValueDto],
   })
-  records: CurrencyValueDto[];
+  records: IndicatorValueDto[];
 
-  constructor(partial: Partial<CurrenciesResponseDto>) {
+  constructor(partial: Partial<CurrencyResponseDto>) {
     Object.assign(this, partial);
   }
 }
