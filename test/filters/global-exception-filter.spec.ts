@@ -1,7 +1,7 @@
 import { ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 import { Logger } from '@nestjs/common';
-import { GlobalExceptionFilter } from '../../../src/filters/global-exception.filter';
+import { GlobalExceptionFilter } from '@filters/global-exception.filter';
 
 describe('GlobalExceptionFilter', () => {
   let exceptionFilter: GlobalExceptionFilter;
