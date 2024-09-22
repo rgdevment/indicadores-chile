@@ -4,6 +4,7 @@ import { GlobalExceptionFilter } from '@filters/global-exception.filter';
 import { EconomicsEnum } from '@modules/economics/enums/economics.enum';
 import { EconomicsService } from '@modules/economics/economics.service';
 import { EconomicsParsePipe } from '@modules/economics/validators/economics-parse.pipe';
+import { ApiCommonErrors } from '@common/decorators/swagger/api-common-errors.decorator';
 
 @ApiTags('Económicos')
 @UseFilters(GlobalExceptionFilter)
@@ -93,35 +94,11 @@ export class EconomicsController {
       },
     },
   })
-  @ApiResponse({
-    status: 400,
-    description: 'Indicador económico no válido o no soportado por la API.',
-    content: {
-      'application/json': {
-        example: {
-          statusCode: 400,
-          timestamp: '2024-09-22T02:26:46.808Z',
-          path: '/v1/CHL',
-          method: 'GET',
-          message: 'CHL no es un indicador económico soportado por nuestra API.',
-        },
-      },
-    },
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Datos no encontrados para el indicador económico solicitado.',
-    content: {
-      'application/json': {
-        example: {
-          statusCode: 404,
-          timestamp: '2024-09-22T02:26:46.808Z',
-          path: '/v1/uf',
-          method: 'GET',
-          message: 'No se encontraron registros para el indicador económico UF en el periodo solicitado.',
-        },
-      },
-    },
+  @ApiCommonErrors({
+    resourceName: 'indicador económico',
+    invalidExampleValue: 'CHL',
+    notFoundExampleValue: 'uf',
+    basePath: '/v1',
   })
   async getIndicator(@Param('indicator', EconomicsParsePipe) indicator: EconomicsEnum) {
     if (indicator === EconomicsEnum.UF) {

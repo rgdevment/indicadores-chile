@@ -5,6 +5,7 @@ import { GlobalExceptionFilter } from '@filters/global-exception.filter';
 import { CurrenciesEnum } from './enums/currencies.enum';
 import { CurrenciesParsePipe } from '@modules/currencies/validators/currencies-parse.pipe';
 import { CurrencyResponseDto } from '@modules/currencies/dto/currency-response.dto';
+import { ApiCommonErrors } from '@common/decorators/swagger/api-common-errors.decorator';
 
 @ApiTags('Divisas')
 @UseFilters(GlobalExceptionFilter)
@@ -54,35 +55,11 @@ export class CurrenciesController {
       },
     },
   })
-  @ApiResponse({
-    status: 400,
-    description: 'Divisa no válida o no soportada por la API.',
-    content: {
-      'application/json': {
-        example: {
-          statusCode: 400,
-          timestamp: '2024-09-22T02:26:46.808Z',
-          path: '/v1/divisas/YEN',
-          method: 'GET',
-          message: 'YEN no es una divisa admitida o soportada por nuestra API.',
-        },
-      },
-    },
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Datos no encontrados para la divisa solicitada.',
-    content: {
-      'application/json': {
-        example: {
-          statusCode: 404,
-          timestamp: '2024-09-22T02:26:46.808Z',
-          path: '/v1/divisas/dolar',
-          method: 'GET',
-          message: 'No se encontraron registros para la divisa DOLAR en el periodo solicitado.',
-        },
-      },
-    },
+  @ApiCommonErrors({
+    resourceName: 'divisa',
+    invalidExampleValue: 'YEN',
+    notFoundExampleValue: 'dolar',
+    basePath: '/v1/divisas',
   })
   async getCurrency(@Param('currency', CurrenciesParsePipe) currency: CurrenciesEnum) {
     return await this.service.retrieveDetailsCurrencyIndicator(currency);
