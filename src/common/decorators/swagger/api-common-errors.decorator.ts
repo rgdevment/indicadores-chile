@@ -37,8 +37,7 @@ export function ApiCommonErrors(options: ApiCommonErrorsOptions) {
             timestamp: '2024-09-22T02:26:46.808Z',
             path: `${basePath}/${notFoundExampleValue}`,
             method: 'GET',
-            message: `No se encontraron registros para el ${resourceName} ${notFoundExampleValue.toUpperCase()} en el 
-                      periodo solicitado.`,
+            message: `No se encontraron registros para el ${resourceName} ${notFoundExampleValue.toUpperCase()}.`,
           },
         },
       },
