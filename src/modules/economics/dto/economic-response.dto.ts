@@ -1,6 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IndicatorValueDto } from '@common/dto/indicator-value.dto';
-import { Expose } from 'class-transformer';
 
 export class EconomicResponseDto {
   @ApiProperty({
@@ -16,7 +15,6 @@ export class EconomicResponseDto {
   accumulated?: number;
 
   @ApiPropertyOptional({ example: 123.45, description: 'El valor acumulado de los últimos 12 meses.' })
-  @Expose({ name: 'accumulated_yearly' })
   accumulatedYearly?: number;
 
   @ApiProperty({
