@@ -25,6 +25,9 @@ Este proyecto proporciona una API REST gratuita y de código abierto para consul
 - **Dólar**: Tasa de cambio del dólar.
     - GET https://indicadores.apirest.cl/v1/dolar
 
+- **Salario**: Salario mínimo e histórico.
+    - GET https://indicadores.apirest.cl/v1/salaries/minimum
+
 Entre otros indicadores económicos, financieros, divisas y salariales, incluyendo:
 
 - **UTM**: Unidad Tributaria Mensual

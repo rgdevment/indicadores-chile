@@ -5,7 +5,7 @@ import { ApiCommonErrors } from '@common/decorators/swagger/api-common-errors.de
 import { WageResponseDto } from '@modules/salaries/wage/dto/wage-response.dto';
 
 @ApiTags('Salariales')
-@Controller('salary')
+@Controller('salaries')
 export class WageController {
   constructor(private readonly service: WageService) {}
 
