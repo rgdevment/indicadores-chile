@@ -7,8 +7,7 @@ import { Wage } from '@modules/salaries/wage/schemas/wage';
 
 @Injectable()
 export class WageRepositoryMongo implements WageRepository {
-  constructor(@InjectModel(Wage.name) private readonly model: Model<WageDocument>) {
-  }
+  constructor(@InjectModel(Wage.name) private readonly model: Model<WageDocument>) {}
 
   async findAll(): Promise<WageDocument[]> {
     return await this.model.find().exec();

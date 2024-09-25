@@ -7,8 +7,7 @@ import { WageResponseDto } from '@modules/salaries/wage/dto/wage-response.dto';
 @ApiTags('Salariales')
 @Controller('salary')
 export class WageController {
-  constructor(private readonly service: WageService) {
-  }
+  constructor(private readonly service: WageService) {}
 
   @Get('minimum')
   @ApiOperation({

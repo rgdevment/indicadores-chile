@@ -1,5 +1,6 @@
 import { IsDateString, IsInt, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 
 export class WageEntryDto {
   @ApiProperty({
@@ -37,13 +38,14 @@ export class WageEntryDto {
     format: 'date',
   })
   @IsDateString()
+  @Transform(({ value }) => {
+    if (value instanceof Date) {
+      return value.toISOString().split('T')[0];
+    } else if (typeof value === 'string') {
+      return value.split('T')[0];
+    } else {
+      return value;
+    }
+  })
   date: string;
-
-  constructor(amount: number, details: string, law: string, range: string, date: Date) {
-    this.amount = amount;
-    this.details = details;
-    this.law = law;
-    this.range = range;
-    this.date = date.toISOString().split('T')[0];
-  }
 }
