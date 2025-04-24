@@ -1,0 +1,18 @@
+services:
+  indicadores-chile:
+    build: ./
+    platform: linux/arm64
+    container_name: indicadores-chile
+    restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - internal-net
+    environment:
+      - NODE_ENV=production
+    expose:
+      - 3000
+
+networks:
+  internal-net:
+    external: true

@@ -6,6 +6,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CurrenciesModule } from '@modules/currencies/currencies.module';
 import { EconomicsModule } from '@modules/economics/economics.module';
 import { SalariesModule } from '@modules/salaries/salaries.module';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { collectDefaultMetrics, Registry } from 'prom-client';
 
 @Module({
   imports: [
@@ -28,11 +30,21 @@ import { SalariesModule } from '@modules/salaries/salaries.module';
       },
       resolvers: [new HeaderResolver([])],
     }),
+    PrometheusModule.register(),
     CurrenciesModule,
     EconomicsModule,
     SalariesModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: 'PrometheusRegistry',
+      useValue: (() => {
+        const registry = new Registry();
+        collectDefaultMetrics({ register: registry });
+        return registry;
+      })(),
+    },
+  ],
 })
 export class AppModule {}
