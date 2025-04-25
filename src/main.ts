@@ -12,14 +12,6 @@ async function bootstrap() {
   app.setGlobalPrefix('v1');
   app.useGlobalInterceptors(new ExcludeNullInterceptor());
 
-  app.use((req: { path: string }, res: { redirect: (arg0: number, arg1: string) => void }, next: () => void) => {
-    if (req.path === '/') {
-      res.redirect(301, 'https://github.com/rgdevment/indicadores-chile');
-    } else {
-      next();
-    }
-  });
-
   const config = new DocumentBuilder()
     .setTitle('Indicadores Chile API')
     .setDescription('API Open-Source con Indicadores económicos, financieros, previsionales y salariales para CHILE')
