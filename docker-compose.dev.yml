@@ -1,0 +1,26 @@
+services:
+  countries-services:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: countries-services-dev
+    platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+    command: pnpm run start:dev
+    volumes:
+      - ./src:/app/src
+      - ./node_modules:/app/node_modules
+      - ./package.json:/app/package.json
+      - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
+    networks:
+      - internal-net
+
+networks:
+  internal-net:
+    external: true

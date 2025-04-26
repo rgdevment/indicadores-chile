@@ -40,7 +40,7 @@ describe('WageResponseDto', () => {
 
     // Verificar que 'historic' es un arreglo de WageEntryDto
     expect(transformed.historic).toBeInstanceOf(Array);
-    transformed.historic.forEach(entry => {
+    transformed.historic.forEach((entry) => {
       expect(entry).toBeInstanceOf(WageEntryDto);
     });
   });
