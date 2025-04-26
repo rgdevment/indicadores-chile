@@ -92,7 +92,7 @@ describe('WageService', () => {
     expect(result).toEqual(expectedDto);
 
     expect(result.current).toBeInstanceOf(WageEntryDto);
-    result.historic.forEach(entry => {
+    result.historic.forEach((entry) => {
       expect(entry).toBeInstanceOf(WageEntryDto);
     });
   });
@@ -196,7 +196,7 @@ describe('WageService', () => {
     expect(result).toEqual(expectedDto);
 
     expect(result.current).toBeInstanceOf(WageEntryDto);
-    result.historic.forEach(entry => {
+    result.historic.forEach((entry) => {
       expect(entry).toBeInstanceOf(WageEntryDto);
     });
   });

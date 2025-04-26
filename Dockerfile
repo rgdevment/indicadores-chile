@@ -5,13 +5,16 @@ FROM --platform=linux/arm64 node:22-alpine AS builder
 
 WORKDIR /app
 
-# Copy dependency definitions and install everything (dev included for build)
-COPY package*.json ./
-RUN npm install
+# Install pnpm
+RUN npm install -g pnpm
+
+# Copy dependency definitions and install everything
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install
 
 # Copy source code and build
 COPY . .
-RUN npm run build
+RUN pnpm run build
 
 # -----------------------
 # STAGE 2: Runtime (lightweight production image)
@@ -23,12 +26,15 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 WORKDIR /app
 
-# Copy only what we need from builder
+# Install pnpm runtime (required if node_modules needs pnpm structure)
+RUN npm install -g pnpm
+
+# Copy only necessary files
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/node_modules ./node_modules
 
-# Permissions and env
+# Set permissions
 RUN chown -R appuser:appgroup /app
 USER appuser
 

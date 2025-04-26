@@ -1,18 +1,19 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "module": "commonjs",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ES2023",
+    "lib": ["ES2023"],
     "declaration": true,
+    "declarationMap": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2021",
+    "esModuleInterop": true,
     "sourceMap": true,
     "outDir": "./dist",
+    "rootDir": "src",
     "baseUrl": "./",
     "paths": {
       "@modules/*": ["src/modules/*"],
@@ -22,11 +23,18 @@
       "@resources/*": ["src/resources/*"]
     },
     "incremental": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "allowJs": false
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "test", "**/*.spec.ts"]
 }

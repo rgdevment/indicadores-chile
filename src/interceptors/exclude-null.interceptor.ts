@@ -6,7 +6,7 @@ import { instanceToPlain } from 'class-transformer';
 @Injectable()
 export class ExcludeNullInterceptor implements NestInterceptor {
   intercept(_: ExecutionContext, next: CallHandler): Observable<any> {
-    return next.handle().pipe(map(data => this.transformResponse(data)));
+    return next.handle().pipe(map((data) => this.transformResponse(data)));
   }
 
   private transformResponse(data: any): any {
@@ -15,7 +15,7 @@ export class ExcludeNullInterceptor implements NestInterceptor {
   }
 
   private removeNullAndUndefinedProperties(obj: any): any {
-    Object.keys(obj).forEach(key => {
+    Object.keys(obj).forEach((key) => {
       if (obj[key] === null || obj[key] === undefined) {
         delete obj[key];
       } else if (typeof obj[key] === 'object') {

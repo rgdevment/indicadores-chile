@@ -28,7 +28,7 @@ export class WageService {
       date: currentRecord.date,
     });
 
-    const historicDto = historicRecords.map(record =>
+    const historicDto = historicRecords.map((record) =>
       plainToInstance(WageEntryDto, {
         amount: record.salary,
         details: record.value_to_word,

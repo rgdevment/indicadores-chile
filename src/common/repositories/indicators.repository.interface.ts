@@ -1,4 +1,4 @@
-import { IndicatorsType } from '../types/indicators.type';
+import type { IndicatorsType } from '../types/indicators.type';
 
 export interface IndicatorsRepositoryInterface<T> {
   findCurrentOrLastDayRecord(indicator: IndicatorsType): Promise<T>;

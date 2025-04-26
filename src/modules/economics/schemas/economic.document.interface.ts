@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import type { Document } from 'mongoose';
 
 export interface EconomicDocument extends Document {
   indicator: string;

@@ -30,21 +30,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
         with:
-          languages: ${{ matrix.language }}
-          build-mode: ${{ matrix.build-mode }}
+          version: 9.0.0
 
-      - name: Enable Corepack and Yarn 4.4.0
-        run: |
-          corepack enable
-          corepack prepare yarn@4.4.0 --activate
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Build project
-        run: |
-          yarn install --immutable
-          yarn build
+        run: pnpm run build
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
