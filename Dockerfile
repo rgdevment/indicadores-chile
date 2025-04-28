@@ -11,7 +11,7 @@ RUN npm install
 
 # Copy source code and build
 COPY . .
-RUN npm run build
+RUN npm run build --ignore-scripts
 
 # -----------------------
 # STAGE 2: Runtime (lightweight production image)
