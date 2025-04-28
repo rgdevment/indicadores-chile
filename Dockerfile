@@ -7,11 +7,11 @@ WORKDIR /app
 
 # Copy dependency definitions and install everything (dev included for build)
 COPY package*.json ./
-RUN npm install
+RUN npm install --ignore-scripts
 
 # Copy source code and build
 COPY . .
-RUN npm run build --ignore-scripts
+RUN npm run build
 
 # -----------------------
 # STAGE 2: Runtime (lightweight production image)
