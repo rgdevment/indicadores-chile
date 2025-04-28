@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 
 @Controller()
-export class healthController {
+export class HealthController {
   @Get('/health')
   async ping() {
     return {

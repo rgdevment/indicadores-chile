@@ -36,15 +36,10 @@ jobs:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
 
-      - name: Enable Corepack and Yarn 4.4.0
-        run: |
-          corepack enable
-          corepack prepare yarn@4.4.0 --activate
-
       - name: Build project
         run: |
-          yarn install --immutable
-          yarn build
+          npm install
+          npm run build
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3

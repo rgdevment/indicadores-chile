@@ -8,6 +8,7 @@ import { EconomicsModule } from '@modules/economics/economics.module';
 import { SalariesModule } from '@modules/salaries/salaries.module';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { collectDefaultMetrics, Registry } from 'prom-client';
+import { HealthController } from './common/controllers/health.controller';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { collectDefaultMetrics, Registry } from 'prom-client';
     EconomicsModule,
     SalariesModule,
   ],
-  controllers: [],
+  controllers: [HealthController],
   providers: [
     {
       provide: 'PrometheusRegistry',
