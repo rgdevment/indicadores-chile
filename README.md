@@ -1,6 +1,17 @@
 # API de Indicadores Económicos y Financieros de Chile (LEGACY)
 
-El mantenimiento de este repositorio se ha movido a: [https://github.com/rgdevment/open-data-service/tree/main/apps/indicators](https://github.com/rgdevment/open-data-service/tree/main/apps/indicators)
+## ⚠️ Este repositorio ha sido migrado y archivado
+
+Este proyecto ha sido **migrado y mejorado** como parte de una transición hacia una arquitectura más estable y mantenible:
+
+- La base de datos fue migrada desde **MongoDB a MariaDB**, permitiendo mejores relaciones y rendimiento.
+- El servicio se integró en un **monorepo consolidado** junto a otros proyectos de datos abiertos.
+- Ahora se ejecuta en un **servidor propio más estable**, lo que permite mantener los servicios disponibles de forma **gratuita y continua** para la comunidad.
+
+👉 El nuevo repositorio actualizado se encuentra en:  
+🔗 [open-data-service/apps/indicators](https://github.com/rgdevment/open-data-service/tree/main/apps/indicators)
+
+> Este repositorio permanecerá como referencia histórica, pero **no recibirá más actualizaciones**.
 
 [![Build CI](https://github.com/rgdevment/indicadores-chile/actions/workflows/main.yml/badge.svg)](https://github.com/rgdevment/indicadores-chile/actions/workflows/main.yml)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=rgdevment_indicadores-chile&metric=coverage)](https://sonarcloud.io/dashboard?id=rgdevment_indicadores-chile)
