@@ -1,6 +1,7 @@
-# API de Indicadores Económicos y Financieros de Chile
+# API de Indicadores Económicos y Financieros de Chile (LEGACY)
 
-[![Sponsor rgdevment](https://img.shields.io/badge/Sponsor-rgdevment-blue?logo=github)](https://github.com/sponsors/rgdevment)
+El mantenimiento de este repositorio se ha movido a: [https://github.com/rgdevment/open-data-service/tree/main/apps/indicators](https://github.com/rgdevment/open-data-service/tree/main/apps/indicators)
+
 [![Build CI](https://github.com/rgdevment/indicadores-chile/actions/workflows/main.yml/badge.svg)](https://github.com/rgdevment/indicadores-chile/actions/workflows/main.yml)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=rgdevment_indicadores-chile&metric=coverage)](https://sonarcloud.io/dashboard?id=rgdevment_indicadores-chile)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=rgdevment_indicadores-chile&metric=alert_status)](https://sonarcloud.io/dashboard?id=rgdevment_indicadores-chile)
@@ -9,6 +10,8 @@
 Este proyecto proporciona una API REST gratuita y de código abierto para consultar indicadores económicos y financieros de Chile, tales como la UF, IPC, UTM, tasas de cambio y otros. Está desarrollada en [NestJS](https://nestjs.com/) y hospedada en [Cloud Run](https://cloud.google.com/run).
 
 ## Endpoints disponibles (Leer documentación)
+
+El mantenimiento de este repositorio se ha movido a: [https://github.com/rgdevment/open-data-service/tree/main/apps/indicators](https://github.com/rgdevment/open-data-service/tree/main/apps/indicators)
 
 ### Documentación
 
@@ -26,7 +29,7 @@ Este proyecto proporciona una API REST gratuita y de código abierto para consul
     - GET https://indicadores.apirest.cl/v1/dolar
 
 - **Salario**: Salario mínimo e histórico.
-    - GET https://indicadores.apirest.cl/v1/salaries/minimum
+    - GET https://indicadores.apirest.cl/v1/salario/base
 
 Entre otros indicadores económicos, financieros, divisas y salariales, incluyendo:
 
@@ -89,22 +92,6 @@ Si deseas desplegar esta API en producción, sigue los siguientes pasos:
     - yarn start:prod
 
 El proyecto está configurado para ser desplegado automáticamente en [Google Cloud Run](https://cloud.google.com/run) utilizando GitHub Actions para integración continua y despliegue continuo.
-
-## Donaciones
-
-Este proyecto es mantenido de manera gratuita para todos. Si encuentras útil esta API y deseas apoyar el mantenimiento, puedes contribuir con una donación voluntaria.
-
-Las donaciones se destinarán exclusivamente a cubrir los costos de infraestructura, que incluyen:
-
-- **Google Cloud Run**: Este es el servicio que aloja y ejecuta la API. Los costos incluyen el uso de CPU, memoria y tiempo de ejecución de la API.
-- **Dominio**: Los costos del registro y mantenimiento del dominio `apirest.cl` y `restapi.cl`.
-- **Almacenamiento**: En caso de que sea necesario, se cubrirán los costos de almacenamiento en bases de datos externas o servicios asociados.
-- **Tráfico de red**: Cualquier costo adicional relacionado con el uso de red y transferencia de datos.
-- **Certificados SSL**: Si es necesario, parte de los fondos se destinarán a la compra o renovación de certificados SSL para asegurar las conexiones.
-
-¡Cualquier aporte es bienvenido y ayudará a mantener el servicio activo y disponible para todos!
-
-Considera [ser un patrocinador](https://github.com/sponsors/rgdevment). ¡Gracias por tu apoyo!
 
 ## Licencia
 
