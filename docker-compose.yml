@@ -1,18 +1,58 @@
 services:
+  mysql:
+    image: mysql:8.4
+    container_name: indicadores-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-indicadores123}
+      MYSQL_DATABASE: ${DB_DATABASE:-indicadores_chile}
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - internal-net
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: indicadores-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    networks:
+      - internal-net
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   indicadores-chile:
-    build: ./
-    platform: linux/arm64
+    build: .
     container_name: indicadores-chile
     restart: unless-stopped
     env_file:
       - .env
+    ports:
+      - '3000:3000'
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     networks:
       - internal-net
     environment:
       - NODE_ENV=production
-    expose:
-      - 3000
+
+volumes:
+  mysql_data:
 
 networks:
   internal-net:
-    external: true
+    driver: bridge

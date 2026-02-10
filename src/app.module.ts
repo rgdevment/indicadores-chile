@@ -1,51 +1,73 @@
+import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
-import { join } from 'path';
-import { HeaderResolver, I18nModule } from 'nestjs-i18n';
-import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { HeaderResolver, I18nModule } from 'nestjs-i18n';
+import { join } from 'path';
+
+import { HealthController } from '@common/controllers/health.controller';
+import { AfpModule } from '@modules/afp/afp.module';
 import { CurrenciesModule } from '@modules/currencies/currencies.module';
 import { EconomicsModule } from '@modules/economics/economics.module';
-import { SalariesModule } from '@modules/salaries/salaries.module';
-import { PrometheusModule } from '@willsoto/nestjs-prometheus';
-import { collectDefaultMetrics, Registry } from 'prom-client';
-import { HealthController } from './common/controllers/health.controller';
+import { WageModule } from '@modules/wage/wage.module';
+
+import {
+  AfpEntity,
+  IndicatorSubtypeEntity,
+  IndicatorTypeEntity,
+  IndicatorValueEntity,
+  WageEntity,
+} from '@entities/index';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
-    }),
-    MongooseModule.forRootAsync({
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
+
+    TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGODB_URI'),
-      }),
       inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'mysql' as const,
+        host: config.get<string>('DB_HOST', 'localhost'),
+        port: config.get<number>('DB_PORT', 3306),
+        username: config.get<string>('DB_USERNAME', 'root'),
+        password: config.get<string>('DB_PASSWORD') ?? '',
+        database: config.get<string>('DB_DATABASE', 'indicadores_chile'),
+        entities: [IndicatorTypeEntity, IndicatorSubtypeEntity, IndicatorValueEntity, AfpEntity, WageEntity],
+        synchronize: config.get<string>('DB_SYNC', 'false') === 'true',
+        logging: config.get<string>('DB_LOGGING', 'false') === 'true',
+      }),
     }),
+
+    CacheModule.registerAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (config: ConfigService) => {
+        const redisUrl = config.get<string>('REDIS_URL');
+        if (redisUrl) {
+          const { redisStore } = await import('cache-manager-ioredis-yet');
+          return {
+            store: redisStore,
+            url: redisUrl,
+            ttl: config.get<number>('CACHE_TTL', 3600) * 1000,
+          };
+        }
+        return { ttl: config.get<number>('CACHE_TTL', 3600) * 1000 };
+      },
+    }),
+
     I18nModule.forRoot({
       fallbackLanguage: 'es',
-      loaderOptions: {
-        path: join(__dirname, '/resources/i18n/'),
-        watch: false,
-      },
-      resolvers: [new HeaderResolver([])],
+      loaderOptions: { path: join(__dirname, '/resources/i18n/'), watch: false },
+      resolvers: [new HeaderResolver(['x-lang'])],
     }),
-    PrometheusModule.register(),
+
     CurrenciesModule,
     EconomicsModule,
-    SalariesModule,
+    AfpModule,
+    WageModule,
   ],
   controllers: [HealthController],
-  providers: [
-    {
-      provide: 'PrometheusRegistry',
-      useValue: (() => {
-        const registry = new Registry();
-        collectDefaultMetrics({ register: registry });
-        return registry;
-      })(),
-    },
-  ],
 })
 export class AppModule {}

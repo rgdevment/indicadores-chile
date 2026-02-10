@@ -1,27 +1,29 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { instanceToPlain } from 'class-transformer';
+import { Observable, map } from 'rxjs';
 
 @Injectable()
 export class ExcludeNullInterceptor implements NestInterceptor {
-  intercept(_: ExecutionContext, next: CallHandler): Observable<any> {
-    return next.handle().pipe(map(data => this.transformResponse(data)));
+  intercept(_context: ExecutionContext, next: CallHandler): Observable<unknown> {
+    return next.handle().pipe(map(data => this.stripNulls(data)));
   }
 
-  private transformResponse(data: any): any {
-    const result = this.removeNullAndUndefinedProperties(data);
-    return instanceToPlain(result);
-  }
-
-  private removeNullAndUndefinedProperties(obj: any): any {
-    Object.keys(obj).forEach(key => {
-      if (obj[key] === null || obj[key] === undefined) {
-        delete obj[key];
-      } else if (typeof obj[key] === 'object') {
-        this.removeNullAndUndefinedProperties(obj[key]);
+  private stripNulls(value: unknown): unknown {
+    if (value === null || value === undefined) {
+      return undefined;
+    }
+    if (Array.isArray(value)) {
+      return value.map(item => this.stripNulls(item));
+    }
+    if (typeof value === 'object') {
+      const result: Record<string, unknown> = {};
+      for (const [key, val] of Object.entries(value as Record<string, unknown>)) {
+        const cleaned = this.stripNulls(val);
+        if (cleaned !== undefined) {
+          result[key] = cleaned;
+        }
       }
-    });
-    return obj;
+      return result;
+    }
+    return value;
   }
 }
