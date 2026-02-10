@@ -65,7 +65,7 @@ jobs:
         run: npm run test --coverage
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v3
+        uses: SonarSource/sonarcloud-github-action@v5
         with:
           args: >
             -Dsonar.projectKey=${{ secrets.SONAR_KEY_IC }}
