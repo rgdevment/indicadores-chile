@@ -5,6 +5,11 @@
   "author": "",
   "private": true,
   "license": "MIT",
+  "packageManager": "npm@11.8.0",
+  "engines": {
+    "node": ">=24.0.0",
+    "npm": ">=11.0.0"
+  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -20,7 +25,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "docker:build": "docker build -t indicadores-chile .",
-    "docker:run": "docker run -p 3000:3000 indicadores-chile"
+    "docker:run": "docker run -p 3000:3000 indicadores-chile",
+    "preinstall": "npx only-allow npm"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^3.1.0",
