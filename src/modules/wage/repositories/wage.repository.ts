@@ -1,16 +1,13 @@
-import { WageEntity } from '@entities/wage.entity';
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { KYSELY } from '@database/database.module';
+import { Database, MinimumWage } from '@database/database.types';
+import { Inject, Injectable } from '@nestjs/common';
+import { Kysely } from 'kysely';
 
 @Injectable()
 export class WageRepository {
-  constructor(
-    @InjectRepository(WageEntity)
-    private readonly repo: Repository<WageEntity>,
-  ) {}
+  constructor(@Inject(KYSELY) private readonly db: Kysely<Database>) {}
 
-  async findAll(): Promise<WageEntity[]> {
-    return this.repo.find({ order: { recorded_date: 'DESC' } });
+  async findAll(): Promise<MinimumWage[]> {
+    return this.db.selectFrom('minimum_wages').selectAll().orderBy('recorded_date', 'desc').execute();
   }
 }

@@ -1,19 +1,20 @@
 ################################
-# Base: shared across stages
+# Base: imagen mínima compartida
 ################################
 FROM node:24-alpine AS base
 RUN apk add --no-cache dumb-init
 WORKDIR /app
 
 ################################
-# Dependencies: install all deps
+# Dependencias: compilación nativa (better-sqlite3)
 ################################
 FROM base AS deps
+RUN apk add --no-cache python3 make g++
 COPY package*.json ./
-RUN npm ci --ignore-scripts
+RUN npm ci && npm cache clean --force
 
 ################################
-# Development: hot-reload target
+# Development: hot-reload + debugger
 ################################
 FROM deps AS development
 ENV NODE_ENV=development
@@ -22,33 +23,31 @@ EXPOSE 3000 9229
 CMD ["dumb-init", "npx", "nest", "start", "--watch"]
 
 ################################
-# Builder: compile TypeScript
+# Builder: compila TypeScript
 ################################
 FROM deps AS builder
 COPY . .
-RUN npm run build
+RUN npm run build && npm prune --omit=dev
 
 ################################
-# Production: minimal & secure
+# Production: imagen mínima y segura
 ################################
 FROM base AS production
 
 ENV NODE_ENV=production
 
-# Production-only dependencies
-COPY package*.json ./
-RUN npm ci --ignore-scripts --omit=dev && npm cache clean --force
-
-# Copy compiled app from builder
+# Solo copiar lo necesario desde builder
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
-
-# Copy i18n resources if present
 COPY --from=builder /app/src/resources ./dist/resources
+COPY --from=builder /app/package.json ./
 
-# Non-root user
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup \
-    && chown -R appuser:appgroup /app
-USER appuser
+# Crear directorio para volumen de datos + usuario sin privilegios
+RUN mkdir -p /app/data \
+    && addgroup -S app && adduser -S app -G app \
+    && chown -R app:app /app
+
+USER app
 
 EXPOSE 3000
 

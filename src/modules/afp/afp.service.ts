@@ -1,4 +1,4 @@
-import { AfpEntity } from '@entities/afp.entity';
+import { AfpCommission } from '@database/database.types';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { AfpResponseDto } from './dto/afp-response.dto';
 import { AfpEnum } from './enums/afp.enum';
@@ -53,7 +53,7 @@ export class AfpService {
     return dto;
   }
 
-  private mapRecordToDto(record: AfpEntity, dto: AfpResponseDto): void {
+  private mapRecordToDto(record: AfpCommission, dto: AfpResponseDto): void {
     const rawKey = record.category + '|' + (record.sub_category ?? '');
     const key = this.normalizeKey(rawKey);
     const mapping = FIELD_MAP[key];

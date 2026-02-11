@@ -5,15 +5,23 @@ services:
       target: production
     container_name: indicadores-chile
     restart: unless-stopped
-    env_file:
-      - .env
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      DB_PATH: /app/data/indicadores.db
+      CACHE_TTL: 3600
+      CACHE_MAX: 1000
+    volumes:
+      - sqlite_data:/app/data
     ports:
       - '3000:3000'
-    networks:
-      - internal-net
-    environment:
-      - NODE_ENV=production
+    read_only: true
+    tmpfs:
+      - /tmp
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
-networks:
-  internal-net:
-    driver: bridge
+volumes:
+  sqlite_data:

@@ -1,102 +1,99 @@
-import { IndicatorValueEntity } from '@entities/indicator-value.entity';
-import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-
-export interface IndicatorQueryResult {
-  value: number;
-  recorded_date: string;
-  value_to_word?: string;
-}
+import { KYSELY } from '@database/database.module';
+import { Database, IndicatorValue } from '@database/database.types';
+import { Inject, Injectable } from '@nestjs/common';
+import { Kysely } from 'kysely';
 
 @Injectable()
 export class IndicatorQueryService {
-  constructor(private readonly repo: Repository<IndicatorValueEntity>) {}
+  constructor(@Inject(KYSELY) protected readonly db: Kysely<Database>) {}
 
-  /** Último registro disponible para un subtipo */
-  async findLatestRecord(subtypeCode: string): Promise<IndicatorValueEntity | null> {
-    return this.repo.findOne({
-      where: { subtype: { code: subtypeCode } },
-      order: { recorded_date: 'DESC' },
-    });
+  async findLatestRecord(subtypeCode: string): Promise<IndicatorValue | undefined> {
+    return this.db
+      .selectFrom('indicator_values as v')
+      .innerJoin('indicator_subtypes as s', 's.id', 'v.subtype_id')
+      .selectAll('v')
+      .where('s.code', '=', subtypeCode)
+      .orderBy('v.recorded_date', 'desc')
+      .limit(1)
+      .executeTakeFirst();
   }
 
-  /** Primer registro del mes actual */
-  async findFirstOfMonth(subtypeCode: string, date: Date = new Date()): Promise<IndicatorValueEntity | null> {
-    const startOfMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-01`;
-    return this.repo
-      .createQueryBuilder('v')
-      .innerJoin('v.subtype', 's')
-      .where('s.code = :code', { code: subtypeCode })
-      .andWhere('v.recorded_date >= :start', { start: startOfMonth })
-      .orderBy('v.recorded_date', 'ASC')
-      .getOne();
+  async findFirstOfMonth(subtypeCode: string, date = new Date()): Promise<IndicatorValue | undefined> {
+    const start = this.monthStart(date);
+    return this.db
+      .selectFrom('indicator_values as v')
+      .innerJoin('indicator_subtypes as s', 's.id', 'v.subtype_id')
+      .selectAll('v')
+      .where('s.code', '=', subtypeCode)
+      .where('v.recorded_date', '>=', start)
+      .orderBy('v.recorded_date', 'asc')
+      .limit(1)
+      .executeTakeFirst();
   }
 
-  /** Último registro del mes actual */
-  async findLastOfMonth(subtypeCode: string, date: Date = new Date()): Promise<IndicatorValueEntity | null> {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const startOfMonth = `${year}-${String(month).padStart(2, '0')}-01`;
-    const startOfNext = month === 12 ? `${year + 1}-01-01` : `${year}-${String(month + 1).padStart(2, '0')}-01`;
-
-    return this.repo
-      .createQueryBuilder('v')
-      .innerJoin('v.subtype', 's')
-      .where('s.code = :code', { code: subtypeCode })
-      .andWhere('v.recorded_date >= :start', { start: startOfMonth })
-      .andWhere('v.recorded_date < :end', { end: startOfNext })
-      .orderBy('v.recorded_date', 'DESC')
-      .getOne();
+  async findLastOfMonth(subtypeCode: string, date = new Date()): Promise<IndicatorValue | undefined> {
+    const [start, end] = this.monthRange(date);
+    return this.db
+      .selectFrom('indicator_values as v')
+      .innerJoin('indicator_subtypes as s', 's.id', 'v.subtype_id')
+      .selectAll('v')
+      .where('s.code', '=', subtypeCode)
+      .where('v.recorded_date', '>=', start)
+      .where('v.recorded_date', '<', end)
+      .orderBy('v.recorded_date', 'desc')
+      .limit(1)
+      .executeTakeFirst();
   }
 
-  /** Promedio del mes actual */
-  async averageOfMonth(subtypeCode: string, date: Date = new Date()): Promise<number | null> {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const startOfMonth = `${year}-${String(month).padStart(2, '0')}-01`;
-    const startOfNext = month === 12 ? `${year + 1}-01-01` : `${year}-${String(month + 1).padStart(2, '0')}-01`;
-
-    const result = await this.repo
-      .createQueryBuilder('v')
-      .innerJoin('v.subtype', 's')
-      .select('AVG(v.value)', 'avg')
-      .where('s.code = :code', { code: subtypeCode })
-      .andWhere('v.recorded_date >= :start', { start: startOfMonth })
-      .andWhere('v.recorded_date < :end', { end: startOfNext })
-      .getRawOne();
-
-    return result?.avg ? Number(result.avg) : null;
+  async averageOfMonth(subtypeCode: string, date = new Date()): Promise<number | null> {
+    const [start, end] = this.monthRange(date);
+    const row = await this.db
+      .selectFrom('indicator_values as v')
+      .innerJoin('indicator_subtypes as s', 's.id', 'v.subtype_id')
+      .select(eb => eb.fn.avg<number>('v.value').as('avg'))
+      .where('s.code', '=', subtypeCode)
+      .where('v.recorded_date', '>=', start)
+      .where('v.recorded_date', '<', end)
+      .executeTakeFirst();
+    return row?.avg ?? null;
   }
 
-  /** Acumulado últimos 12 meses (suma de valores) */
   async accumulatedLast12Months(subtypeCode: string): Promise<number | null> {
     const now = new Date();
-    const yearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
-    const start = yearAgo.toISOString().slice(0, 10);
-
-    const result = await this.repo
-      .createQueryBuilder('v')
-      .innerJoin('v.subtype', 's')
-      .select('SUM(v.value)', 'total')
-      .where('s.code = :code', { code: subtypeCode })
-      .andWhere('v.recorded_date >= :start', { start })
-      .getRawOne();
-
-    return result?.total ? Number(result.total) : null;
+    const start = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate()).toISOString().slice(0, 10);
+    const row = await this.db
+      .selectFrom('indicator_values as v')
+      .innerJoin('indicator_subtypes as s', 's.id', 'v.subtype_id')
+      .select(eb => eb.fn.sum<number>('v.value').as('total'))
+      .where('s.code', '=', subtypeCode)
+      .where('v.recorded_date', '>=', start)
+      .executeTakeFirst();
+    return row?.total ?? null;
   }
 
-  /** Acumulado año en curso */
   async accumulatedCurrentYear(subtypeCode: string): Promise<number | null> {
-    const startOfYear = `${new Date().getFullYear()}-01-01`;
+    const start = `${new Date().getFullYear()}-01-01`;
+    const row = await this.db
+      .selectFrom('indicator_values as v')
+      .innerJoin('indicator_subtypes as s', 's.id', 'v.subtype_id')
+      .select(eb => eb.fn.sum<number>('v.value').as('total'))
+      .where('s.code', '=', subtypeCode)
+      .where('v.recorded_date', '>=', start)
+      .executeTakeFirst();
+    return row?.total ?? null;
+  }
 
-    const result = await this.repo
-      .createQueryBuilder('v')
-      .innerJoin('v.subtype', 's')
-      .select('SUM(v.value)', 'total')
-      .where('s.code = :code', { code: subtypeCode })
-      .andWhere('v.recorded_date >= :start', { start: startOfYear })
-      .getRawOne();
+  /* ─── helpers ──────────────────────────────────────── */
 
-    return result?.total ? Number(result.total) : null;
+  private monthStart(d: Date): string {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`;
+  }
+
+  private monthRange(d: Date): [string, string] {
+    const y = d.getFullYear();
+    const m = d.getMonth() + 1;
+    const start = `${y}-${String(m).padStart(2, '0')}-01`;
+    const end = m === 12 ? `${y + 1}-01-01` : `${y}-${String(m + 1).padStart(2, '0')}-01`;
+    return [start, end];
   }
 }

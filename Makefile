@@ -27,7 +27,7 @@ dev-down:
 dev-logs:
 	$(COMPOSE_DEV) logs -f $(APP_NAME)-dev
 
-## Restart only the app container (keeps DB/Redis)
+## Restart the app container
 dev-restart:
 	$(COMPOSE_DEV) restart $(APP_NAME)-dev
 
@@ -57,17 +57,8 @@ prod-restart:
 	$(COMPOSE_PROD) restart $(APP_NAME)
 
 # ─────────────────────────────────────────────
-# Infrastructure (dev only)
+# Infrastructure — not needed (SQLite embedded)
 # ─────────────────────────────────────────────
-.PHONY: infra infra-down
-
-## Start only MySQL + Redis (without app)
-infra:
-	$(COMPOSE_DEV) up -d mysql redis
-
-## Stop MySQL + Redis
-infra-down:
-	$(COMPOSE_DEV) stop mysql redis
 
 # ─────────────────────────────────────────────
 # Quality & Tests
@@ -144,8 +135,7 @@ help:
 	@echo "    make prod-restart   Restart app container only"
 	@echo ""
 	@echo "  Infrastructure:"
-	@echo "    make infra          Start MySQL + Redis only (no app)"
-	@echo "    make infra-down     Stop MySQL + Redis"
+	@echo "    (SQLite integrado, sin servicios externos)"
 	@echo ""
 	@echo "  Quality:"
 	@echo "    make test           Run tests"

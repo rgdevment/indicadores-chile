@@ -1,4 +1,4 @@
-import { WageEntity } from '@entities/wage.entity';
+import { MinimumWage } from '@database/database.types';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { WageEntryDto } from './dto/wage-entry.dto';
 import { WageResponseDto } from './dto/wage-response.dto';
@@ -15,7 +15,7 @@ export class WageService {
       throw new NotFoundException('No se encontró información de salario mínimo');
     }
 
-    const toDto = (w: WageEntity): WageEntryDto => ({
+    const toDto = (w: MinimumWage): WageEntryDto => ({
       amount: Number(w.salary),
       details: w.value_to_word ?? undefined,
       law: w.law ?? undefined,

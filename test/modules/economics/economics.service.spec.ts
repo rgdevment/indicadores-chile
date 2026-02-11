@@ -34,9 +34,9 @@ describe('EconomicsService', () => {
     });
 
     it('should throw NotFoundException when no data', async () => {
-      repo.findLatestRecord.mockResolvedValue(null);
-      repo.findFirstOfMonth.mockResolvedValue(null);
-      repo.findLastOfMonth.mockResolvedValue(null);
+      repo.findLatestRecord.mockResolvedValue(undefined);
+      repo.findFirstOfMonth.mockResolvedValue(undefined);
+      repo.findLastOfMonth.mockResolvedValue(undefined);
       repo.averageOfMonth.mockResolvedValue(null);
 
       await expect(service.getIndicator(EconomicsEnum.UF)).rejects.toThrow(NotFoundException);

@@ -29,8 +29,8 @@ describe('CurrenciesService', () => {
   });
 
   it('should throw NotFoundException when no data found', async () => {
-    repo.findLatestRecord.mockResolvedValue(null);
-    repo.findFirstOfMonth.mockResolvedValue(null);
+    repo.findLatestRecord.mockResolvedValue(undefined);
+    repo.findFirstOfMonth.mockResolvedValue(undefined);
     repo.averageOfMonth.mockResolvedValue(null);
 
     await expect(service.getIndicator(CurrenciesEnum.EURO)).rejects.toThrow(NotFoundException);

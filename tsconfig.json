@@ -20,12 +20,12 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
+      "@database/*": ["src/database/*"],
       "@modules/*": ["src/modules/*"],
       "@filters/*": ["src/filters/*"],
       "@interceptors/*": ["src/interceptors/*"],
       "@common/*": ["src/common/*"],
-      "@resources/*": ["src/resources/*"],
-      "@entities/*": ["src/entities/*"]
+      "@resources/*": ["src/resources/*"]
     },
     "incremental": true,
     "skipLibCheck": true

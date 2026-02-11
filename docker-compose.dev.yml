@@ -1,73 +1,25 @@
-# Development — standalone: docker compose -f docker-compose.dev.yml up
 services:
-  mysql:
-    image: mysql:8.4
-    container_name: indicadores-mysql
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-indicadores123}
-      MYSQL_DATABASE: ${DB_DATABASE:-indicadores_chile}
-    ports:
-      - '3306:3306'
-    volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - internal-net
-    healthcheck:
-      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  redis:
-    image: redis:7-alpine
-    container_name: indicadores-redis
-    restart: unless-stopped
-    ports:
-      - '6379:6379'
-    networks:
-      - internal-net
-    healthcheck:
-      test: ['CMD', 'redis-cli', 'ping']
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   indicadores-chile:
     build:
       context: .
       target: development
     container_name: indicadores-chile-dev
-    env_file:
-      - .env
+    env_file: .env
     environment:
-      - NODE_ENV=development
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - DB_USERNAME=root
-      - DB_PASSWORD=${DB_PASSWORD:-indicadores123}
-      - DB_DATABASE=${DB_DATABASE:-indicadores_chile}
-      - REDIS_URL=redis://redis:6379
-    depends_on:
-      mysql:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      NODE_ENV: development
+      DB_PATH: /app/data/indicadores.db
+      CACHE_TTL: 10
+      CACHE_MAX: 100
     volumes:
       - ./src:/app/src
       - ./test:/app/test
       - ./nest-cli.json:/app/nest-cli.json
       - ./tsconfig.json:/app/tsconfig.json
       - ./tsconfig.build.json:/app/tsconfig.build.json
+      - sqlite_dev:/app/data
     ports:
       - '3000:3000'
-      - '9229:9229' # debugger
-    networks:
-      - internal-net
+      - '9229:9229'
 
 volumes:
-  mysql_data:
-
-networks:
-  internal-net:
-    driver: bridge
+  sqlite_dev:
