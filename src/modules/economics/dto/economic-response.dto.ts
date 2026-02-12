@@ -1,29 +1,19 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IndicatorValueDto } from '@common/dto/indicator-value.dto';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class EconomicResponseDto {
-  @ApiProperty({
-    description: 'Indicador económico para el cual se calculan los valores',
-    example: 'UF',
-  })
-  indicator: string;
+  @ApiProperty({ example: 'UF', description: 'Tipo de indicador económico' })
+  indicator!: string;
 
-  @ApiPropertyOptional({ example: 123.45, description: 'El promedio del mes en curso del indicador económico.' })
+  @ApiPropertyOptional({ example: 38_200.5, description: 'Promedio del mes' })
   average?: number;
 
-  @ApiPropertyOptional({ example: 123.45, description: 'El valor acumulado del año actual del indicador económico.' })
+  @ApiPropertyOptional({ example: 4.5, description: 'Acumulado últimos 12 meses' })
   accumulated?: number;
 
-  @ApiPropertyOptional({ example: 123.45, description: 'El valor acumulado de los últimos 12 meses.' })
+  @ApiPropertyOptional({ example: 2.1, description: 'Acumulado año en curso' })
   accumulatedYearly?: number;
 
-  @ApiProperty({
-    description: 'Listado de los valores actuales',
-    type: [IndicatorValueDto],
-  })
-  records: IndicatorValueDto[];
-
-  constructor(partial: Partial<EconomicResponseDto>) {
-    Object.assign(this, partial);
-  }
+  @ApiProperty({ type: [IndicatorValueDto], description: 'Registros del indicador' })
+  records!: IndicatorValueDto[];
 }

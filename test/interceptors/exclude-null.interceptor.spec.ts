@@ -1,6 +1,6 @@
+import { ExcludeNullInterceptor } from '@interceptors/exclude-null.interceptor';
 import { CallHandler, ExecutionContext } from '@nestjs/common';
 import { of } from 'rxjs';
-import { ExcludeNullInterceptor } from '@interceptors/exclude-null.interceptor';
 
 describe('ExcludeNullInterceptor', () => {
   let interceptor: ExcludeNullInterceptor;
@@ -9,58 +9,47 @@ describe('ExcludeNullInterceptor', () => {
     interceptor = new ExcludeNullInterceptor();
   });
 
-  it('should not modify data without null or undefined properties', done => {
-    const context = {} as ExecutionContext;
-    const callHandler: CallHandler = {
-      handle: () => of({ name: 'John', age: 30 }),
-    };
+  const mockContext = {} as ExecutionContext;
+  const createHandler = (data: unknown): CallHandler => ({
+    handle: () => of(data),
+  });
 
-    interceptor.intercept(context, callHandler).subscribe(result => {
-      expect(result).toEqual({ name: 'John', age: 30 });
+  it('should remove null properties', done => {
+    const handler = createHandler({ a: 1, b: null, c: 'hello' });
+    interceptor.intercept(mockContext, handler).subscribe(result => {
+      expect(result).toEqual({ a: 1, c: 'hello' });
       done();
     });
   });
 
-  it('should remove null and undefined properties', done => {
-    const context = {} as ExecutionContext;
-    const callHandler: CallHandler = {
-      handle: () =>
-        of({
-          name: 'John',
-          age: null,
-          location: undefined,
-          job: 'Developer',
-        }),
-    };
-
-    interceptor.intercept(context, callHandler).subscribe(result => {
-      expect(result).toEqual({ name: 'John', job: 'Developer' });
+  it('should remove undefined properties', done => {
+    const handler = createHandler({ a: 1, b: undefined });
+    interceptor.intercept(mockContext, handler).subscribe(result => {
+      expect(result).toEqual({ a: 1 });
       done();
     });
   });
 
-  it('should remove null and undefined properties from nested objects', done => {
-    const context = {} as ExecutionContext;
-    const callHandler: CallHandler = {
-      handle: () =>
-        of({
-          name: 'John',
-          address: {
-            city: 'New York',
-            zip: null,
-            country: undefined,
-          },
-          age: null,
-        }),
-    };
+  it('should handle nested objects', done => {
+    const handler = createHandler({ a: { b: null, c: 1 }, d: 'test' });
+    interceptor.intercept(mockContext, handler).subscribe(result => {
+      expect(result).toEqual({ a: { c: 1 }, d: 'test' });
+      done();
+    });
+  });
 
-    interceptor.intercept(context, callHandler).subscribe(result => {
-      expect(result).toEqual({
-        name: 'John',
-        address: {
-          city: 'New York',
-        },
-      });
+  it('should handle arrays', done => {
+    const handler = createHandler([{ a: null, b: 1 }, { c: 2 }]);
+    interceptor.intercept(mockContext, handler).subscribe(result => {
+      expect(result).toEqual([{ b: 1 }, { c: 2 }]);
+      done();
+    });
+  });
+
+  it('should pass through primitives', done => {
+    const handler = createHandler(42);
+    interceptor.intercept(mockContext, handler).subscribe(result => {
+      expect(result).toBe(42);
       done();
     });
   });

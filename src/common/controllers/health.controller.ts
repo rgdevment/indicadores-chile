@@ -1,12 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-@Controller()
+@ApiTags('Health')
+@Controller('health')
 export class HealthController {
-  @Get('/health')
-  async ping() {
-    return {
-      status: 'ok',
-      timestamp: new Date().toISOString(),
-    };
+  @Get()
+  @ApiOperation({ summary: 'Verificar estado del servicio' })
+  check() {
+    return { status: 'ok', timestamp: new Date().toISOString() };
   }
 }

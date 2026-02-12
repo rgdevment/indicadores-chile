@@ -1,95 +1,49 @@
-import { ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
-import { I18nService } from 'nestjs-i18n';
-import { Logger } from '@nestjs/common';
 import { GlobalExceptionFilter } from '@filters/global-exception.filter';
+import { HttpException, HttpStatus } from '@nestjs/common';
+import { I18nService } from 'nestjs-i18n';
 
 describe('GlobalExceptionFilter', () => {
-  let exceptionFilter: GlobalExceptionFilter;
-  let i18nService: I18nService;
-  let mockArgumentsHost: ArgumentsHost;
-  let mockResponse: any;
-  let mockRequest: any;
-  let loggerErrorSpy: jest.SpyInstance;
+  let filter: GlobalExceptionFilter;
+  let mockI18n: Partial<I18nService>;
+  let mockResponse: { status: jest.Mock; json: jest.Mock };
+  let mockHost: any;
 
   beforeEach(() => {
-    i18nService = { t: jest.fn().mockReturnValue('An unexpected error occurred') } as unknown as I18nService;
-    exceptionFilter = new GlobalExceptionFilter(i18nService);
-
+    mockI18n = {
+      t: jest.fn().mockResolvedValue('Ocurrió un error inesperado'),
+    };
     mockResponse = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
     };
-
-    mockRequest = {
-      url: '/test',
-      method: 'GET',
-    };
-
-    mockArgumentsHost = {
-      switchToHttp: jest.fn().mockReturnValue({
+    mockHost = {
+      switchToHttp: () => ({
         getResponse: () => mockResponse,
-        getRequest: () => mockRequest,
+        getRequest: () => ({}),
       }),
-    } as unknown as ArgumentsHost;
-
-    loggerErrorSpy = jest.spyOn(Logger.prototype, 'error').mockImplementation(() => {});
+    };
+    filter = new GlobalExceptionFilter(mockI18n as I18nService);
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
+  it('should handle HttpException', async () => {
+    const exception = new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    await filter.catch(exception, mockHost);
+    expect(mockResponse.status).toHaveBeenCalledWith(404);
   });
 
-  it('should handle HttpException correctly', () => {
-    const exception = new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-
-    exceptionFilter.catch(exception, mockArgumentsHost);
-
-    expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
+  it('should handle HttpException with object response', async () => {
+    const exception = new HttpException({ statusCode: 400, message: 'Bad Request' }, HttpStatus.BAD_REQUEST);
+    await filter.catch(exception, mockHost);
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
     expect(mockResponse.json).toHaveBeenCalledWith({
-      statusCode: HttpStatus.FORBIDDEN,
-      timestamp: expect.any(String),
-      path: '/test',
-      method: 'GET',
-      message: 'Forbidden',
+      statusCode: 400,
+      message: 'Bad Request',
     });
-    expect(i18nService.t).not.toHaveBeenCalled();
-    expect(loggerErrorSpy).not.toHaveBeenCalled();
   });
 
-  it('should handle unexpected exception correctly and log it', () => {
-    const exception = new Error('Something went wrong');
-
-    exceptionFilter.catch(exception, mockArgumentsHost);
-
-    expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
-    expect(mockResponse.json).toHaveBeenCalledWith({
-      statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-      timestamp: expect.any(String),
-      path: '/test',
-      method: 'GET',
-      message: 'An unexpected error occurred',
-    });
-    expect(i18nService.t).toHaveBeenCalledWith('globals.UNEXPECTED_ERROR');
-    expect(loggerErrorSpy).toHaveBeenCalledWith(
-      'Unexpected error occurred: Error: Something went wrong',
-      expect.any(String),
-    );
-  });
-
-  it('should handle HttpException with custom message', () => {
-    const exception = new HttpException('Custom message', HttpStatus.BAD_REQUEST);
-
-    exceptionFilter.catch(exception, mockArgumentsHost);
-
-    expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
-    expect(mockResponse.json).toHaveBeenCalledWith({
-      statusCode: HttpStatus.BAD_REQUEST,
-      timestamp: expect.any(String),
-      path: '/test',
-      method: 'GET',
-      message: 'Custom message',
-    });
-    expect(i18nService.t).not.toHaveBeenCalled();
-    expect(loggerErrorSpy).not.toHaveBeenCalled();
+  it('should handle unexpected errors with i18n message', async () => {
+    await filter.catch(new Error('crash'), mockHost);
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockI18n.t).toHaveBeenCalledWith('globals.UNEXPECTED_ERROR');
   });
 });

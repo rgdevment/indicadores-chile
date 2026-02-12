@@ -1,0 +1,25 @@
+services:
+  indicadores-chile:
+    build:
+      context: .
+      target: development
+    container_name: indicadores-chile-dev
+    env_file: .env
+    environment:
+      NODE_ENV: development
+      DB_PATH: /app/data/indicadores.db
+      CACHE_TTL: 10
+      CACHE_MAX: 100
+    volumes:
+      - ./src:/app/src
+      - ./test:/app/test
+      - ./nest-cli.json:/app/nest-cli.json
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./tsconfig.build.json:/app/tsconfig.build.json
+      - sqlite_dev:/app/data
+    ports:
+      - '3000:3000'
+      - '9229:9229'
+
+volumes:
+  sqlite_dev:

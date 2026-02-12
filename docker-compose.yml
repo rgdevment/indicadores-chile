@@ -1,18 +1,27 @@
 services:
   indicadores-chile:
-    build: ./
-    platform: linux/arm64
+    build:
+      context: .
+      target: production
     container_name: indicadores-chile
     restart: unless-stopped
-    env_file:
-      - .env
-    networks:
-      - internal-net
+    env_file: .env
     environment:
-      - NODE_ENV=production
-    expose:
-      - 3000
+      NODE_ENV: production
+      DB_PATH: /app/data/indicadores.db
+      CACHE_TTL: 3600
+      CACHE_MAX: 1000
+    volumes:
+      - sqlite_data:/app/data
+    ports:
+      - '3000:3000'
+    read_only: true
+    tmpfs:
+      - /tmp
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
-networks:
-  internal-net:
-    external: true
+volumes:
+  sqlite_data:

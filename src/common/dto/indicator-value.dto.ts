@@ -1,34 +1,31 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class IndicatorValueDto {
-  @ApiProperty({
-    description: 'La fecha en formato ISO',
-    example: '2024-09-17',
-  })
-  date: string;
+  @ApiProperty({ example: '2026-02-10', description: 'Fecha del registro (YYYY-MM-DD)' })
+  date!: string;
 
-  @ApiProperty({
-    description: 'El valor del indicador para la fecha',
-    example: 1026.99,
-  })
-  value: number;
+  @ApiProperty({ example: 950.25, description: 'Valor numérico del indicador' })
+  value!: number;
 
-  @ApiProperty({
-    description: 'El valor escrito en palabras',
-    example: 'mil veintiséis pesos con noventa y nueve céntimos',
-  })
-  details: string;
+  @ApiPropertyOptional({ example: 'novecientos cincuenta con veinticinco', description: 'Valor en palabras' })
+  details?: string;
 
-  @ApiProperty({
-    description: 'Nota adicional sobre el valor',
-    example: 'Valor actualizado al día de hoy, o del último registro disponible.',
-  })
-  _note: string;
+  @ApiPropertyOptional({ description: 'Nota contextual sobre el valor' })
+  _note?: string;
 
-  constructor(date: Date, value: number, details: string, note: string) {
-    this.date = date.toISOString().split('T')[0];
-    this.value = value;
-    this.details = details;
-    this._note = note;
+  constructor(partial: Partial<IndicatorValueDto>) {
+    Object.assign(this, partial);
+  }
+
+  static fromEntity(
+    entity: { recorded_date: string; value: number | string; value_to_word?: string | null },
+    note?: string,
+  ): IndicatorValueDto {
+    return new IndicatorValueDto({
+      date: entity.recorded_date,
+      value: Number(entity.value),
+      details: entity.value_to_word ?? undefined,
+      _note: note,
+    });
   }
 }

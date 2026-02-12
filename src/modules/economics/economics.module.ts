@@ -1,13 +1,10 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Economic, EconomicSchema } from '@modules/economics/schemas/economic';
-import { EconomicsService } from '@modules/economics/economics.service';
-import { EconomicRepositoryMongo } from '@modules/economics/repositories/economic.repository';
-import { EconomicsController } from '@modules/economics/economics.controller';
+import { EconomicsController } from './economics.controller';
+import { EconomicsService } from './economics.service';
+import { EconomicRepository } from './repositories/economic.repository';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Economic.name, schema: EconomicSchema }])],
-  providers: [EconomicsService, { provide: 'EconomicRepository', useClass: EconomicRepositoryMongo }],
   controllers: [EconomicsController],
+  providers: [EconomicsService, EconomicRepository],
 })
 export class EconomicsModule {}

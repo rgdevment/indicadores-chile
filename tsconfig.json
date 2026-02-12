@@ -1,20 +1,26 @@
 {
   "compilerOptions": {
     "strict": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2021",
+    "esModuleInterop": true,
+    "target": "ES2022",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
+      "@database/*": ["src/database/*"],
       "@modules/*": ["src/modules/*"],
       "@filters/*": ["src/filters/*"],
       "@interceptors/*": ["src/interceptors/*"],
@@ -22,11 +28,6 @@
       "@resources/*": ["src/resources/*"]
     },
     "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "skipLibCheck": true
   }
 }
